@@ -4,7 +4,7 @@
  */
 package ehis;
 
-import net.sourceforge.jdatepicker.JDatePicker;
+import net.sourceforge.jdatechooser.JDateChooser;
 
 /**
  *
