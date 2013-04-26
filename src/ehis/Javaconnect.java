@@ -18,7 +18,7 @@ public class Javaconnect {
     public static Connection ConnectorDb(){
         try{
             Class.forName("org.sqlite.JDBC");
-            Connection conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\SahitiRaviChand\\Documents\\NetBeansProjects\\Ehis\\Ehis.sqlite");
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:" + System.getProperty("user.dir")+ "\\Ehis.sqlite");
             return conn;
             
         }
