@@ -145,22 +145,32 @@ public class LoginPanel extends javax.swing.JPanel {
             String dob = rs.getString("DOB");
             String phone = rs.getString("Phone");
             if(rs.next()){
-                JOptionPane.showMessageDialog(null, "Username and Password are correct");
-                if(userType.equals("Patient")){
-                    PatientPanel panel = new PatientPanel(username,firstname,lastname,address,dob,phone);
-                    ehis.setContentPane(panel);
-                }
-                else if(userType.equals("Receptionist")){
-                    ReceptionistPanel panel = new ReceptionistPanel(username,firstname,lastname,address,dob,phone);
-                    ehis.setContentPane(panel);
-                }
-                else if(userType.equals("Nurse")){
-                   DoctorNursePanel panel = new DoctorNursePanel(username,firstname,lastname,address,dob,phone);
-                   ehis.setContentPane(panel);
-                }
-                else if(userType.equals("Doctor")){
-                   DoctorNursePanel panel= new DoctorNursePanel(username,firstname,lastname,address,dob,phone);
-                   ehis.setContentPane(panel);                   
+                //JOptionPane.showMessageDialog(null, "Username and Password are correct");
+                switch (userType) {
+                    case "Patient":
+                        {
+                            PatientPanel panel = new PatientPanel(username,firstname,lastname,address,dob,phone);
+                            ehis.setContentPane(panel);
+                            break;
+                        }
+                    case "Receptionist":
+                        {
+                            ReceptionistPanel panel = new ReceptionistPanel(username,firstname,lastname,address,dob,phone);
+                            ehis.setContentPane(panel);
+                            break;
+                        }
+                    case "Nurse":
+                        {                   
+                            DoctorNursePanel panel = new DoctorNursePanel(username,firstname,lastname,address,dob,phone);
+                            ehis.setContentPane(panel);
+                            break;
+                        }
+                    case "Doctor":
+                        {
+                            DoctorNursePanel panel= new DoctorNursePanel(username,firstname,lastname,address,dob,phone);
+                            ehis.setContentPane(panel);
+                            break;
+                        }
                 }
             ehis.pack();
             ehis.validate();
