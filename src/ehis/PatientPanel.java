@@ -15,10 +15,16 @@ public class PatientPanel extends javax.swing.JPanel {
      */
     public PatientPanel() {
         initComponents();
+        
+        
     }
 
     PatientPanel(String username, String firstname, String lastname, String address, String dob, String phone) {
         this();
+        PersonalInfoPanel personalPanel = patientRec_PatRecepView1.getPersonalInfoPanel();
+        
+        personalPanel.setAllFields(username);
+        personalPanel.validate();
     }
 
     /**

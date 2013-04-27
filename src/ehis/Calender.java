@@ -33,7 +33,7 @@ public class Calender extends javax.swing.JFrame {
     public Calender() {
         initComponents();
         //this.username = username;
-        conn = Javaconnect.ConnectorDb();
+        conn = EHIS.getConnection();
         Update_table();
     }
 

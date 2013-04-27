@@ -37,7 +37,7 @@ public class PersonalInfoEditPanel extends javax.swing.JPanel {
         this.username = username;
         this.myDialog = dialog;
         initComponents();
-        conn = Javaconnect.ConnectorDb();   
+        conn = EHIS.getConnection();
         setAllFields(username);
     }    
 

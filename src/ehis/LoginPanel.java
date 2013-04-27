@@ -19,7 +19,7 @@ public class LoginPanel extends javax.swing.JPanel {
      */
     public LoginPanel() {
         initComponents();
-        conn = Javaconnect.ConnectorDb();
+        conn = EHIS.getConnection();
         ehis = EHIS.getEhis();
     }
 

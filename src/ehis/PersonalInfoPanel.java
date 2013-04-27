@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -25,21 +26,19 @@ public class PersonalInfoPanel extends javax.swing.JPanel {
      */
     public PersonalInfoPanel() {
         initComponents();
-        conn = Javaconnect.ConnectorDb();   
+        conn = EHIS.getConnection();
     }
     
     public void setAllFields(String username){
         try{
             this.username = username;
-            String sql = "SELECT * from User_Info where Username=?";
-
-            pst = conn.prepareStatement(sql);
-            pst.setString(1, username);  
+            String sql = "SELECT * from Login where userID= '" + username + "';";
+            pst = conn.prepareStatement(sql); 
             rs = pst.executeQuery();
-            
+            System.out.println("Boom");
             //for displaying name on the label
-            String firstname = rs.getString("FirstName");
-            String lastname = rs.getString("LastName");
+            String firstname = rs.getString("FName");
+            String lastname = rs.getString("LName");
             lbl_Name.setText("Name: "+ firstname + " " +lastname);
             
             String address = rs.getString("Address");
@@ -49,7 +48,7 @@ public class PersonalInfoPanel extends javax.swing.JPanel {
             java.sql.Date dob = new java.sql.Date(date.getTime());  
             lbl_DOB.setText(dob.toString());
             
-            String phone = rs.getString("Phone");
+            String phone = rs.getString("PhoneNum");
             lbl_Phone.setText(phone);             
             
             JOptionPane.showMessageDialog(null, "Information saved");
@@ -58,6 +57,27 @@ public class PersonalInfoPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, e);                    
         }       
     }
+
+    public JLabel getLbl_Address() {
+        return lbl_Address;
+    }
+
+    public JLabel getLbl_DOB() {
+        return lbl_DOB;
+    }
+
+    public JLabel getLbl_Name() {
+        return lbl_Name;
+    }
+
+    public JLabel getLbl_Phone() {
+        return lbl_Phone;
+    }
+
+    public JLabel getLbl_Username() {
+        return lbl_Username;
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.

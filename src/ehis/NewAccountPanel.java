@@ -28,7 +28,7 @@ public class NewAccountPanel extends javax.swing.JPanel {
     public NewAccountPanel() {
         initComponents();
 
-        conn = Javaconnect.ConnectorDb();
+        conn = EHIS.getConnection();
 
         try {
             stat = conn.createStatement();

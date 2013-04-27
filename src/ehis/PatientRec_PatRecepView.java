@@ -23,6 +23,11 @@ public class PatientRec_PatRecepView extends javax.swing.JPanel {
       
     }
 
+    public PersonalInfoPanel getPersonalInfoPanel() {
+        return personalInfoPanel;
+    }
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

@@ -33,7 +33,7 @@ public class DoctorNursePanel extends javax.swing.JPanel {
 
     DoctorNursePanel(String username, String firstname, String lastname, String address, String dob, String phone) {
         initComponents();
-        conn = Javaconnect.ConnectorDb();
+        conn = EHIS.getConnection();
         ehis = EHIS.getEhis();
         //btn_Edit.setAllFields(username);  
         setAllFields(username);

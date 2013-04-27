@@ -4,7 +4,10 @@
  */
 package ehis;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -19,6 +22,7 @@ public class EHIS extends JFrame {
     static final int PATIENT = 4;
     private static EHIS ehis;
     private static JPanel loginPanel;
+    private static Connection connection;
 
     /**
      * Creates new form EHIS
@@ -56,6 +60,10 @@ public class EHIS extends JFrame {
         return ehis;
     }
     
+    public static Connection getConnection(){
+        return connection;
+    }
+    
     public static JPanel getLoginPanel(){
         return loginPanel;
     }
@@ -86,6 +94,16 @@ public class EHIS extends JFrame {
         }
         //</editor-fold>
 
+        try{
+            Class.forName("org.sqlite.JDBC");
+            connection = DriverManager.getConnection("jdbc:sqlite:" + System.getProperty("user.dir")+ "\\Ehis.sqlite");
+               
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+           
+        }
+        
         /* Create and display the form */
         
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -98,6 +116,8 @@ public class EHIS extends JFrame {
                 ehis.setVisible(true);
             }
         });
+        
+        
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
