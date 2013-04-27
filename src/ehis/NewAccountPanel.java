@@ -4,7 +4,6 @@
  */
 package ehis;
 
-import javax.swing.JPanel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
