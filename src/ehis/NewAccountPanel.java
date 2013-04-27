@@ -4,46 +4,38 @@
  */
 package ehis;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
-
-import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.*;
-import net.proteanit.sql.DbUtils;
 
 public class NewAccountPanel extends javax.swing.JPanel {
-    
+
     Connection conn = null;
     ResultSet rs = null;
     PreparedStatement pst = null;
     Statement stat;
-
 
     /**
      * Creates new form NewAccountPanel
      */
     public NewAccountPanel() {
         initComponents();
-        
+
         conn = Javaconnect.ConnectorDb();
-        
-    try {
+
+        try {
             stat = conn.createStatement();
-            rs=stat.executeQuery("Select * from UserType;");
+            rs = stat.executeQuery("Select * from UserType;");
             while (rs.next()) {
-            cmb_usertype.addItem(rs.getString("type"));
-        }
+                cmb_usertype.addItem(rs.getString("type"));
+            }
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -51,10 +43,10 @@ public class NewAccountPanel extends javax.swing.JPanel {
 //        String[] userTypes = {"Patient", "Receptionist", "Nurse","Doctor"};
 //        cmb_Usertype.setModel(new DefaultComboBoxModel(userTypes));
     }
-     
-    public void clear(){
+
+    public void clear() {
         txt_FName.setText("");
-        txt_LName.setText(""); 
+        txt_LName.setText("");
         txt_username.setText("");
         txt_password.setText("");
         txt_phnum.setText("");
@@ -64,7 +56,6 @@ public class NewAccountPanel extends javax.swing.JPanel {
         txt_reenter_password.setText("");
         cmb_usertype.setSelectedItem("");
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -265,7 +256,7 @@ public class NewAccountPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cmb_usertypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_usertypeActionPerformed
-             // TODO add your handling code here:
+        // TODO add your handling code here:
     }//GEN-LAST:event_cmb_usertypeActionPerformed
 
     private void btn_BackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_BackActionPerformed
@@ -277,94 +268,93 @@ public class NewAccountPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_BackActionPerformed
 
     private void btn_createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_createActionPerformed
- 
-            String sql;
-        
-            String username = txt_username.getText();
-            String password = String.valueOf(txt_password.getPassword());
-            String passwordRe = String.valueOf(txt_reenter_password.getPassword());
-            String firstName = txt_FName.getText();
-            String lastName = txt_LName.getText();
-            String phoneNum = txt_phnum.getText();
-            String email = txt_email.getText();
-            String address = txt_address.getText();
-            Date dt_dob = txt_dob.getDate();
-            
-            
-            //ENFORCE POLICIES
-            
-            //Valid date
-            if(dt_dob == null){
-                JOptionPane.showMessageDialog(null, "Invalid DOB");
-                return;
-            }
-            
-            if(!dt_dob.before(new Date())){
-                JOptionPane.showMessageDialog(null, "Date of Birth needs to be before today!");
-                return;
-            }
-            String dob = new SimpleDateFormat("MM/dd/yyyy").format(dt_dob);
-            
-            
-            //password policies
-            boolean hasSpecial, hasUpper, hasDigit, isAtLeastEight;
-            
-            isAtLeastEight = password.length() >= 8;
-            hasSpecial = Pattern.compile("[!@#$%]").matcher(password).find();
-            hasUpper = Pattern.compile("[A-Z]").matcher(password).find();
-            hasDigit = Pattern.compile("[0-9]").matcher(password).find();
-            
-            if(!hasSpecial || !hasUpper || !hasDigit || !isAtLeastEight){
-                JOptionPane.showMessageDialog(null, "Passwords needs at least eight characters, "
-                        + "one upper case letter, one digit, "
-                        + "and one of the following characters: ! @ # $ %");
-                return;
-            }
-            
-            //password equal to re-entered password    
-            if (!password.equals(passwordRe)){
-                JOptionPane.showMessageDialog(null, "Passwords Not Equal");
-                return;
-            }
-            
-            //phone-number format
-            
-            boolean phoneGood = Pattern.compile("^[0-9]{3}-[0-9]{3}-[0-9]{4}$").matcher(phoneNum).find();
-            if(!phoneGood){
-                JOptionPane.showMessageDialog(null, "Phone number format must be ###-###-####");
-                return;
-            }
-            
-                             
-        try{
-            
+
+        String sql;
+
+        String username = txt_username.getText();
+        String password = String.valueOf(txt_password.getPassword());
+        String passwordRe = String.valueOf(txt_reenter_password.getPassword());
+        String firstName = txt_FName.getText();
+        String lastName = txt_LName.getText();
+        String phoneNum = txt_phnum.getText();
+        String email = txt_email.getText();
+        String address = txt_address.getText();
+        Date dt_dob = txt_dob.getDate();
+
+
+        //ENFORCE POLICIES
+
+        //Valid date
+        if (dt_dob == null) {
+            JOptionPane.showMessageDialog(null, "Invalid DOB");
+            return;
+        }
+
+        if (!dt_dob.before(new Date())) {
+            JOptionPane.showMessageDialog(null, "Date of Birth needs to be before today!");
+            return;
+        }
+        String dob = new SimpleDateFormat("MM/dd/yyyy").format(dt_dob);
+
+
+        //password policies
+        boolean hasSpecial, hasUpper, hasDigit, isAtLeastEight;
+
+        isAtLeastEight = password.length() >= 8;
+        hasSpecial = Pattern.compile("[!@#$%]").matcher(password).find();
+        hasUpper = Pattern.compile("[A-Z]").matcher(password).find();
+        hasDigit = Pattern.compile("[0-9]").matcher(password).find();
+
+        if (!hasSpecial || !hasUpper || !hasDigit || !isAtLeastEight) {
+            JOptionPane.showMessageDialog(null, "Passwords needs at least eight characters, "
+                    + "one upper case letter, one digit, "
+                    + "and one of the following characters: ! @ # $ %");
+            return;
+        }
+
+        //password equal to re-entered password    
+        if (!password.equals(passwordRe)) {
+            JOptionPane.showMessageDialog(null, "Passwords Not Equal");
+            return;
+        }
+
+        //phone-number format
+
+        boolean phoneGood = Pattern.compile("^[0-9]{3}-[0-9]{3}-[0-9]{4}$").matcher(phoneNum).find();
+        if (!phoneGood) {
+            JOptionPane.showMessageDialog(null, "Phone number format must be ###-###-####");
+            return;
+        }
+
+
+        try {
+
             //make sure username isn't already taken
-            sql= "SELECT userID FROM Login;";
+            sql = "SELECT userID FROM Login;";
             rs = stat.executeQuery(sql);
-            while(rs.next()){
-                if(username.equals(rs.getString("userID"))){
+            while (rs.next()) {
+                if (username.equals(rs.getString("userID"))) {
                     JOptionPane.showMessageDialog(null, "Username already Taken");
                     return;
                 }
             }
-            
-            String selecteditem= cmb_usertype.getSelectedItem().toString();
-            stat=conn.createStatement();
-            sql= "SELECT TypeID FROM UserType WHERE type = '" + selecteditem + "';";
+
+            String selecteditem = cmb_usertype.getSelectedItem().toString();
+            stat = conn.createStatement();
+            sql = "SELECT TypeID FROM UserType WHERE type = '" + selecteditem + "';";
             rs = stat.executeQuery(sql);
             sql = "INSERT INTO Login (userID, Password, FName, LName, PhoneNum, Email, Address, DOB, UserTypeTypeID)"
                     + "VALUES('" + username + "','" + password
                     + "','" + firstName + "','" + lastName + "','" + phoneNum
                     + "','" + email + "','" + address + "','" + dob
                     + "','" + rs.getInt("TypeID") + "');";
-            
+
             pst = conn.prepareStatement(sql);
             pst.executeUpdate();
             clear();
             JOptionPane.showMessageDialog(null, "New Account Created");
-        }
-        catch(Exception e){
-            JOptionPane.showMessageDialog(null, e);                    
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
         }
 
     }//GEN-LAST:event_btn_createActionPerformed
@@ -376,7 +366,6 @@ public class NewAccountPanel extends javax.swing.JPanel {
     private void txt_usernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_usernameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_usernameActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Back;
     private javax.swing.JButton btn_create;
