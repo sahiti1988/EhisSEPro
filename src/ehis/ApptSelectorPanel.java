@@ -4,17 +4,42 @@
  */
 package ehis;
 
+import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.regex.Pattern;
+import javax.swing.*;
 /**
  *
  * @author Joe
  */
 public class ApptSelectorPanel extends javax.swing.JPanel {
-
+    
+        Connection conn = null;
+        ResultSet rs = null;
+        //PreparedStatement pst = null;
+        Statement stat;
     /**
      * Creates new form AppointmentPanel
      */
     public ApptSelectorPanel() {
         initComponents();
+        
+        conn = EHIS.getConnection();
+
+        try {
+            stat = conn.createStatement();
+            rs = stat.executeQuery("Select * from Login JOIN UserType ON UserType.TypeID = Login.UserTypeTypeID WHERE UserType.type = 'Doctor';");
+            while (rs.next()) {
+            doctorCombo.addItem(rs.getString("FName"));
+            
+            
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
     }
 
     /**
@@ -36,13 +61,9 @@ public class ApptSelectorPanel extends javax.swing.JPanel {
         submitButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
 
-        doctorCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel1.setText("Doctor");
 
         jLabel2.setText("Appointment Chooser");
-
-        typeCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel3.setText("Type");
 
