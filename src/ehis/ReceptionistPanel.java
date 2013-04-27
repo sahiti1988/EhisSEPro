@@ -17,7 +17,7 @@ public class ReceptionistPanel extends javax.swing.JPanel {
         initComponents();
     }
 
-    ReceptionistPanel(String username, String firstname, String lastname, String address, String dob, String phone) {
+    ReceptionistPanel(String username) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

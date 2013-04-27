@@ -19,7 +19,7 @@ public class PatientPanel extends javax.swing.JPanel {
         
     }
 
-    PatientPanel(String username, String firstname, String lastname, String address, String dob, String phone) {
+    PatientPanel(String username) {
         this();
         PersonalInfoPanel personalPanel = patientRec_PatRecepView1.getPersonalInfoPanel();
         
