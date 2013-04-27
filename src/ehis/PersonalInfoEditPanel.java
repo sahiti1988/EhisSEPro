@@ -6,27 +6,22 @@ package ehis;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-
 import java.sql.ResultSet;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 
 /**
  *
  * @author Joe
  */
 public class PersonalInfoEditPanel extends javax.swing.JPanel {
-    
+
     Connection conn = null;
     ResultSet rs = null;
     ResultSet rs1 = null;
     PreparedStatement pst = null;
-    PreparedStatement pst1 = null;    
-    
+    PreparedStatement pst1 = null;
     EHIS ehis;
-    
     String username;
     JDialog myDialog;
 
@@ -39,30 +34,32 @@ public class PersonalInfoEditPanel extends javax.swing.JPanel {
         initComponents();
         conn = EHIS.getConnection();
         setAllFields(username);
-    }    
+    }
 
-        public void setAllFields(String username){
-            try{
+    public void setAllFields(String username) {
+        try {
+
+            String sql = "SELECT * from Login where userID = '" + username + "';";
+
+            pst1 = conn.prepareStatement(sql);
+            rs1 = pst1.executeQuery();
+
+            String usertype = rs1.getString("UserTypeTypeID");
+            lbl_Usertype_Value.setText(usertype);
+
+            String firstname = rs1.getString("FName");
+            lbl_First_Name_Value.setText(firstname);
+
+            lbl_Username_Value.setText(username);
             
-        String sql = "SELECT * from User_Info Username=?";
-               
-        pst1 = conn.prepareStatement(sql);
-        pst1.setString(1, username);        
-        rs1 = pst1.executeQuery();
-              
-        String usertype = rs1.getString("Usertype");
-        lbl_Usertype_Value.setText(usertype);
-        
-        String firstname = rs1.getString("FirstName");
-        lbl_First_Name_Value.setText(firstname);
-        
-        lbl_Username_Value.setText(username);  
-        
+            txt_Last_Name.setText(rs1.getString("LName"));
+            txt_Phone.setText(rs1.getString("PhoneNum"));
+            txtarea_Address.setText(rs1.getString("Address"));
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
         }
-        catch(Exception e){
-            JOptionPane.showMessageDialog(null, e);                    
-        }
-        
+
     }
 
 //    public JTextField getAddressField() {
@@ -88,8 +85,6 @@ public class PersonalInfoEditPanel extends javax.swing.JPanel {
 //    public JLabel getTypeLabel() {
 //        return typeLabel;
 //    }
-
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -237,36 +232,34 @@ public class PersonalInfoEditPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_SaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_SaveActionPerformed
-        try{
-            
-        String sql = "UPDATE User_Info SET LastName=?, DOB=?, Phone=?, Address=? where Username=?";
-               
-        java.util.Date date = txt_DOB.getDate();           
-        java.sql.Date dob = new java.sql.Date(date.getTime());                      
-             
-        pst = conn.prepareStatement(sql);
-        //pst.setString(1, txt_First_Name.getText());  
-        pst.setString(1, txt_Last_Name.getText());  
-        pst.setString(2, dob.toString());  
-        pst.setString(3, txt_Phone.getText());  
-        pst.setString(4, txtarea_Address.getText()); 
-        
-        //String username = lbl_Username.getText();
-        pst.setString(5, username);
-        
-        pst.executeUpdate(); 
-        JOptionPane.showMessageDialog(null, "Information saved");
-        
-        PatientPanel panel = new PatientPanel();
-        ehis.setContentPane(panel);
-        
-        }
-        catch(Exception e){
-            JOptionPane.showMessageDialog(null, e);                    
-        }
-                
-    }//GEN-LAST:event_btn_SaveActionPerformed
+        try {
 
+            String sql = "UPDATE Login SET LName=?, DOB=?, PhoneNum=?, Address=? where userID=?";
+
+            java.util.Date date = txt_DOB.getDate();
+            java.sql.Date dob = new java.sql.Date(date.getTime());
+
+            pst = conn.prepareStatement(sql);
+            //pst.setString(1, txt_First_Name.getText());  
+            pst.setString(1, txt_Last_Name.getText());
+            pst.setString(2, dob.toString());
+            pst.setString(3, txt_Phone.getText());
+            pst.setString(4, txtarea_Address.getText());
+
+            //String username = lbl_Username.getText();
+            pst.setString(5, username);
+
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Information saved");
+
+            PatientPanel panel = new PatientPanel();
+            ehis.setContentPane(panel);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+
+    }//GEN-LAST:event_btn_SaveActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Save;
     private javax.swing.JLabel jLabel1;
