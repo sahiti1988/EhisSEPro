@@ -8,9 +8,17 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
 
 import java.awt.HeadlessException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.*;
 import net.proteanit.sql.DbUtils;
 
@@ -27,6 +35,7 @@ public class NewAccountPanel extends javax.swing.JPanel {
      */
     public NewAccountPanel() {
         initComponents();
+        
         conn = Javaconnect.ConnectorDb();
         
     try {
@@ -42,9 +51,7 @@ public class NewAccountPanel extends javax.swing.JPanel {
 //        String[] userTypes = {"Patient", "Receptionist", "Nurse","Doctor"};
 //        cmb_Usertype.setModel(new DefaultComboBoxModel(userTypes));
     }
-    
-    
-    
+     
     public void clear(){
         txt_FName.setText("");
         txt_LName.setText(""); 
@@ -53,7 +60,7 @@ public class NewAccountPanel extends javax.swing.JPanel {
         txt_phnum.setText("");
         txt_email.setText("");
         txt_address.setText("");
-        txt_dob.setText("");
+        txt_dob.setDate(null);
         txt_reenter_password.setText("");
         cmb_usertype.setSelectedItem("");
     }
@@ -86,11 +93,11 @@ public class NewAccountPanel extends javax.swing.JPanel {
         txt_phnum = new javax.swing.JTextField();
         txt_email = new javax.swing.JTextField();
         txt_address = new javax.swing.JTextField();
-        txt_dob = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        txt_dob = new com.toedter.calendar.JDateChooser();
 
         btn_create.setText("Create");
         btn_create.addActionListener(new java.awt.event.ActionListener() {
@@ -105,11 +112,11 @@ public class NewAccountPanel extends javax.swing.JPanel {
             }
         });
 
-        usernameLabel.setText("Username");
+        usernameLabel.setText("Username*");
 
-        passwordLabel.setText("Password");
+        passwordLabel.setText("Password*");
 
-        passwordLabel1.setText("Re-enter Password");
+        passwordLabel1.setText("Re-enter Password*");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Create New Account");
@@ -139,18 +146,22 @@ public class NewAccountPanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel3.setText("Date of Birth");
+        jLabel3.setText("Date of Birth*");
 
         jLabel4.setText("Address");
 
         jLabel5.setText("Email");
 
-        jLabel6.setText("Phone #");
+        jLabel6.setText("Phone #*");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(236, 236, 236)
+                .addComponent(btn_create, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -168,15 +179,18 @@ public class NewAccountPanel extends javax.swing.JPanel {
                             .addComponent(txt_LName))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cmb_usertype, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(59, 59, 59)
+                                .addGap(45, 45, 45)
                                 .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txt_dob))))
+                                .addGap(11, 11, 11)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(cmb_usertype, 0, 132, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addComponent(txt_dob, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -204,10 +218,6 @@ public class NewAccountPanel extends javax.swing.JPanel {
                                 .addComponent(btn_Back)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(87, 87, 87))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(236, 236, 236)
-                .addComponent(btn_create, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,7 +226,7 @@ public class NewAccountPanel extends javax.swing.JPanel {
                 .addComponent(btn_Back)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txt_username, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(usernameLabel)
@@ -235,19 +245,21 @@ public class NewAccountPanel extends javax.swing.JPanel {
                     .addComponent(txt_address, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_FName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(firstNameLabel)
-                    .addComponent(txt_dob, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_LName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(usernameLabel2)
-                    .addComponent(cmb_usertype, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(42, 42, 42)
-                .addComponent(btn_create)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txt_FName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(firstNameLabel)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txt_LName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(usernameLabel2)
+                            .addComponent(cmb_usertype, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addGap(42, 42, 42)
+                        .addComponent(btn_create))
+                    .addComponent(txt_dob, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -265,18 +277,86 @@ public class NewAccountPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_BackActionPerformed
 
     private void btn_createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_createActionPerformed
-       
+ 
+            String sql;
+        
+            String username = txt_username.getText();
+            String password = String.valueOf(txt_password.getPassword());
+            String passwordRe = String.valueOf(txt_reenter_password.getPassword());
+            String firstName = txt_FName.getText();
+            String lastName = txt_LName.getText();
+            String phoneNum = txt_phnum.getText();
+            String email = txt_email.getText();
+            String address = txt_address.getText();
+            Date dt_dob = txt_dob.getDate();
+            
+            
+            //ENFORCE POLICIES
+            
+            //Valid date
+            if(dt_dob == null){
+                JOptionPane.showMessageDialog(null, "Invalid DOB");
+                return;
+            }
+            
+            if(!dt_dob.before(new Date())){
+                JOptionPane.showMessageDialog(null, "Date of Birth needs to be before today!");
+                return;
+            }
+            String dob = new SimpleDateFormat("MM/dd/yyyy").format(dt_dob);
+            
+            
+            //password policies
+            boolean hasSpecial, hasUpper, hasDigit, isAtLeastEight;
+            
+            isAtLeastEight = password.length() >= 8;
+            hasSpecial = Pattern.compile("[!@#$%]").matcher(password).find();
+            hasUpper = Pattern.compile("[A-Z]").matcher(password).find();
+            hasDigit = Pattern.compile("[0-9]").matcher(password).find();
+            
+            if(!hasSpecial || !hasUpper || !hasDigit || !isAtLeastEight){
+                JOptionPane.showMessageDialog(null, "Passwords needs at least eight characters, "
+                        + "one upper case letter, one digit, "
+                        + "and one of the following characters: ! @ # $ %");
+                return;
+            }
+            
+            //password equal to re-entered password    
+            if (!password.equals(passwordRe)){
+                JOptionPane.showMessageDialog(null, "Passwords Not Equal");
+                return;
+            }
+            
+            //phone-number format
+            
+            boolean phoneGood = Pattern.compile("^[0-9]{3}-[0-9]{3}-[0-9]{4}$").matcher(phoneNum).find();
+            if(!phoneGood){
+                JOptionPane.showMessageDialog(null, "Phone number format must be ###-###-####");
+                return;
+            }
+            
+                             
         try{
+            
+            //make sure username isn't already taken
+            sql= "SELECT userID FROM Login;";
+            rs = stat.executeQuery(sql);
+            while(rs.next()){
+                if(username.equals(rs.getString("userID"))){
+                    JOptionPane.showMessageDialog(null, "Username already Taken");
+                    return;
+                }
+            }
             
             String selecteditem= cmb_usertype.getSelectedItem().toString();
             stat=conn.createStatement();
-            String sql1= "SELECT TypeID FROM UserType WHERE type = '"+selecteditem+"';";
-            rs = stat.executeQuery(sql1);
-            String sql = "INSERT INTO Login (userID, Password, FName, LName, PhoneNum, Email, Address, DOB, UserTypeTypeID)"
-                    + "VALUES('"+txt_username.getText()+"','"+ String.valueOf(txt_password.getPassword())
-                    +"','"+txt_FName.getText()+"','"+txt_LName.getText()+"',"+txt_phnum.getText()
-                    +",'"+txt_email.getText()+"','"+txt_address.getText()+"','"+txt_dob.getText()
-                    +"',"+ rs.getInt("TypeID") +");";
+            sql= "SELECT TypeID FROM UserType WHERE type = '" + selecteditem + "';";
+            rs = stat.executeQuery(sql);
+            sql = "INSERT INTO Login (userID, Password, FName, LName, PhoneNum, Email, Address, DOB, UserTypeTypeID)"
+                    + "VALUES('" + username + "','" + password
+                    + "','" + firstName + "','" + lastName + "','" + phoneNum
+                    + "','" + email + "','" + address + "','" + dob
+                    + "','" + rs.getInt("TypeID") + "');";
             
             pst = conn.prepareStatement(sql);
             pst.executeUpdate();
@@ -313,7 +393,7 @@ public class NewAccountPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txt_FName;
     private javax.swing.JTextField txt_LName;
     private javax.swing.JTextField txt_address;
-    private javax.swing.JTextField txt_dob;
+    private com.toedter.calendar.JDateChooser txt_dob;
     private javax.swing.JTextField txt_email;
     private javax.swing.JPasswordField txt_password;
     private javax.swing.JTextField txt_phnum;
