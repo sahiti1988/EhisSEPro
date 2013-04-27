@@ -3,17 +3,17 @@
  * and open the template in the editor.
  */
 package ehis;
+
 import java.sql.*;
 import javax.swing.*;
 
 public class LoginPanel extends javax.swing.JPanel {
-    
+
     Connection conn = null;
     ResultSet rs = null;
     PreparedStatement pst = null;
-    
     EHIS ehis;
-    
+
     /**
      * Creates new form Login
      */
@@ -125,64 +125,47 @@ public class LoginPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_New_AccountActionPerformed
 
     private void btn_LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_LoginActionPerformed
-       String sql = "SELECT * FROM Login where userID = '"
-               +txt_username.getText() +"' AND Password = '"+String.valueOf(txt_password.getPassword())+"';";
-        try{ 
+        String username = txt_username.getText();
+        String password = String.valueOf(txt_password.getPassword());
+        String sql = "SELECT * FROM Login where userID = '"
+                + username + "' AND Password = '" + password + "';";
+        try {
             pst = conn.prepareStatement(sql);
-            //pst.setString(1, txt_username.getText());
-            //pst.setString(2, txt_password.getPassword().toString());
             rs = pst.executeQuery();
-            
-            String userType = rs.getString("UsertypeTypeID");
-            //String userType = cmb_Usertype.getSelectedItem().toString();   
-            String username = rs.getString("userID");
-            String password = rs.getString("Password");
-            String firstname = rs.getString("FName");
-            String lastname = rs.getString("LName");
-            String address = rs.getString("Address");
-            String dob = rs.getString("DOB");
-            String phone = rs.getString("PhoneNUM");
-            if(rs.next()){
-                //JOptionPane.showMessageDialog(null, "Username and Password are correct");
+
+            if (rs.next()) {
+                String userType = rs.getString("UsertypeTypeID");
                 switch (userType) {
-                    case "1":
-                        {
-                            PatientPanel panel = new PatientPanel(username,firstname,lastname,address,dob,phone);
-                            ehis.setContentPane(panel);
-                            break;
-                        }
-                    case "4":
-                        {
-                            ReceptionistPanel panel = new ReceptionistPanel(username,firstname,lastname,address,dob,phone);
-                            ehis.setContentPane(panel);
-                            break;
-                        }
-                    case "3":
-                        {                   
-                            DoctorNursePanel panel = new DoctorNursePanel(username,firstname,lastname,address,dob,phone);
-                            ehis.setContentPane(panel);
-                            break;
-                        }
-                    case "2":
-                        {
-                            DoctorNursePanel panel= new DoctorNursePanel(username,firstname,lastname,address,dob,phone);
-                            ehis.setContentPane(panel);
-                            break;
-                        }
+                    case "1": {
+                        PatientPanel panel = new PatientPanel(username);
+                        ehis.setContentPane(panel);
+                        break;
+                    }
+                    case "4": {
+                        ReceptionistPanel panel = new ReceptionistPanel(username);
+                        ehis.setContentPane(panel);
+                        break;
+                    }
+                    case "3": {
+                        DoctorNursePanel panel = new DoctorNursePanel(username);
+                        ehis.setContentPane(panel);
+                        break;
+                    }
+                    case "2": {
+                        DoctorNursePanel panel = new DoctorNursePanel(username);
+                        ehis.setContentPane(panel);
+                        break;
+                    }
                 }
-            ehis.pack();
-            ehis.validate();
-            }
-            else
-            {
+                ehis.pack();
+                ehis.validate();
+            } else {
                 JOptionPane.showMessageDialog(null, "Username or Password are invalid");
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
     }//GEN-LAST:event_btn_LoginActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel EHISLabel;
     private javax.swing.JButton btn_Forgot_Username_Password;
