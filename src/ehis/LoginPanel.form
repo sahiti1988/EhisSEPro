@@ -24,8 +24,8 @@
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="txt_Username" pref="170" max="32767" attributes="0"/>
-                  <Component id="txt_Password" max="32767" attributes="0"/>
+                  <Component id="txt_username" pref="170" max="32767" attributes="0"/>
+                  <Component id="txt_password" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
           </Group>
@@ -58,13 +58,13 @@
               <Component id="EHISLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="txt_Username" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txt_username" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="usernameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="passwordLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txt_Password" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txt_password" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="btn_Login" min="-2" max="-2" attributes="0"/>
@@ -79,7 +79,7 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JTextField" name="txt_Username">
+    <Component class="javax.swing.JTextField" name="txt_username">
     </Component>
     <Component class="javax.swing.JLabel" name="usernameLabel">
       <Properties>
@@ -120,7 +120,7 @@
         <Property name="text" type="java.lang.String" value="Electronic Health Information System"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JPasswordField" name="txt_Password">
+    <Component class="javax.swing.JPasswordField" name="txt_password">
     </Component>
   </SubComponents>
 </Form>

@@ -3,9 +3,6 @@
  * and open the template in the editor.
  */
 package ehis;
-
-import java.sql.ResultSet;
-
 import java.sql.*;
 import javax.swing.*;
 
@@ -35,14 +32,14 @@ public class LoginPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        txt_Username = new javax.swing.JTextField();
+        txt_username = new javax.swing.JTextField();
         usernameLabel = new javax.swing.JLabel();
         passwordLabel = new javax.swing.JLabel();
         btn_Login = new javax.swing.JButton();
         btn_New_Account = new javax.swing.JButton();
         btn_Forgot_Username_Password = new javax.swing.JButton();
         EHISLabel = new javax.swing.JLabel();
-        txt_Password = new javax.swing.JPasswordField();
+        txt_password = new javax.swing.JPasswordField();
 
         usernameLabel.setText("Username");
 
@@ -78,8 +75,8 @@ public class LoginPanel extends javax.swing.JPanel {
                     .addComponent(passwordLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txt_Username, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
-                    .addComponent(txt_Password))
+                    .addComponent(txt_username, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+                    .addComponent(txt_password))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(42, 42, 42)
@@ -104,12 +101,12 @@ public class LoginPanel extends javax.swing.JPanel {
                 .addComponent(EHISLabel)
                 .addGap(56, 56, 56)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_Username, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_username, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(usernameLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(passwordLabel)
-                    .addComponent(txt_Password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txt_password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(btn_Login)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
@@ -128,44 +125,45 @@ public class LoginPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_New_AccountActionPerformed
 
     private void btn_LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_LoginActionPerformed
-       String sql = "Select * from User_Info where Username=? and Password=?";
+       String sql = "SELECT * FROM Login where userID = '"
+               +txt_username.getText() +"' AND Password = '"+String.valueOf(txt_password.getPassword())+"';";
         try{ 
             pst = conn.prepareStatement(sql);
-            pst.setString(1, txt_Username.getText());
-            pst.setString(2, txt_Password.getText());
-            
+            //pst.setString(1, txt_username.getText());
+            //pst.setString(2, txt_password.getPassword().toString());
             rs = pst.executeQuery();
             
-            String userType = rs.getString("Usertype");
+            String userType = rs.getString("UsertypeTypeID");
             //String userType = cmb_Usertype.getSelectedItem().toString();   
-            String username = rs.getString("Username");
-            String firstname = rs.getString("FirstName");
-            String lastname = rs.getString("LastName");
+            String username = rs.getString("userID");
+            String password = rs.getString("Password");
+            String firstname = rs.getString("FName");
+            String lastname = rs.getString("LName");
             String address = rs.getString("Address");
             String dob = rs.getString("DOB");
-            String phone = rs.getString("Phone");
+            String phone = rs.getString("PhoneNUM");
             if(rs.next()){
                 //JOptionPane.showMessageDialog(null, "Username and Password are correct");
                 switch (userType) {
-                    case "Patient":
+                    case "1":
                         {
                             PatientPanel panel = new PatientPanel(username,firstname,lastname,address,dob,phone);
                             ehis.setContentPane(panel);
                             break;
                         }
-                    case "Receptionist":
+                    case "4":
                         {
                             ReceptionistPanel panel = new ReceptionistPanel(username,firstname,lastname,address,dob,phone);
                             ehis.setContentPane(panel);
                             break;
                         }
-                    case "Nurse":
+                    case "3":
                         {                   
                             DoctorNursePanel panel = new DoctorNursePanel(username,firstname,lastname,address,dob,phone);
                             ehis.setContentPane(panel);
                             break;
                         }
-                    case "Doctor":
+                    case "2":
                         {
                             DoctorNursePanel panel= new DoctorNursePanel(username,firstname,lastname,address,dob,phone);
                             ehis.setContentPane(panel);
@@ -191,8 +189,8 @@ public class LoginPanel extends javax.swing.JPanel {
     private javax.swing.JButton btn_Login;
     private javax.swing.JButton btn_New_Account;
     private javax.swing.JLabel passwordLabel;
-    private javax.swing.JPasswordField txt_Password;
-    private javax.swing.JTextField txt_Username;
+    private javax.swing.JPasswordField txt_password;
+    private javax.swing.JTextField txt_username;
     private javax.swing.JLabel usernameLabel;
     // End of variables declaration//GEN-END:variables
 }
