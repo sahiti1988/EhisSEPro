@@ -98,7 +98,6 @@ public class DoctorNursePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_Manage_Patient_RecordActionPerformed
 
     private void btn_View_Edit_CalenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_View_Edit_CalenderActionPerformed
-        //Calender jframe = new Calender();
         CalendarDoctor panel = new CalendarDoctor();
         ehis.setContentPane(panel);
         ehis.pack();
