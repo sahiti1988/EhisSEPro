@@ -4,17 +4,56 @@
  */
 package ehis;
 
+import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import javax.swing.*;
+import org.joda.time.*;
+import org.joda.time.format.*;
+
 /**
  *
  * @author Joe
  */
 public class ApptSelectorPanel extends javax.swing.JPanel {
+    
+    Connection conn = null;
+    ResultSet rs = null;
+    ResultSet rs1 =null;
+    PreparedStatement pst = null;
+    Statement stat;
+    Calender cal = null;
+    DateTimeFormatter formatter=null;
+    LocalTime time=null;
 
     /**
      * Creates new form AppointmentPanel
      */
     public ApptSelectorPanel() {
         initComponents();
+        
+        conn = EHIS.getConnection();
+
+        try {
+            stat = conn.createStatement();
+            rs = stat.executeQuery("Select * from Login JOIN UserType On UserType.TypeID = Login.UserTypeTypeID WHERE UserType.Type = 'Doctor';");
+            while (rs.next()) {
+                doctorCombo.addItem(rs.getString("FName"));
+            }
+            rs = stat.executeQuery("Select * from AppointmentType;");
+            while (rs.next()) {
+                typeCombo.addItem(rs.getString("AppType"));
+            }
+            
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
@@ -31,24 +70,21 @@ public class ApptSelectorPanel extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         typeCombo = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
-        dateCombo = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
         submitButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
-
-        doctorCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jLabel5 = new javax.swing.JLabel();
+        DateChoosen = new com.toedter.calendar.JDateChooser();
+        CheckApp = new javax.swing.JButton();
+        AvTime = new javax.swing.JTextField();
 
         jLabel1.setText("Doctor");
 
         jLabel2.setText("Appointment Chooser");
 
-        typeCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel3.setText("Type");
 
-        dateCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel4.setText("Date & Time");
+        jLabel4.setText("Select Date:");
 
         submitButton.setText("Submit");
         submitButton.addActionListener(new java.awt.event.ActionListener() {
@@ -59,36 +95,53 @@ public class ApptSelectorPanel extends javax.swing.JPanel {
 
         cancelButton.setText("Cancel");
 
+        jLabel5.setText("Next Available Time:");
+
+        CheckApp.setText("Check Availability");
+        CheckApp.setActionCommand("Check Availability");
+        CheckApp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CheckAppActionPerformed(evt);
+            }
+        });
+
+        AvTime.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AvTimeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel2)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(typeCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(doctorCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGap(0, 109, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dateCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(cancelButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(submitButton)))
+                        .addComponent(submitButton))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 9, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(typeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addComponent(doctorCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(152, 152, 152)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(DateChoosen, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(CheckApp))
+                            .addComponent(AvTime, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -96,22 +149,32 @@ public class ApptSelectorPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(doctorCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(typeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(dateCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addGap(59, 59, 59)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(submitButton)
-                    .addComponent(cancelButton))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(126, 126, 126)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(AvTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(submitButton)
+                            .addComponent(cancelButton)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(doctorCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(typeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(CheckApp)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(DateChoosen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel4)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -120,14 +183,96 @@ public class ApptSelectorPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_submitButtonActionPerformed
 
+    private void CheckAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckAppActionPerformed
+     
+        String selectedDoc = doctorCombo.getSelectedItem().toString();
+        String selectedType = typeCombo.getSelectedItem().toString();
+        Date dt_app = DateChoosen.getDate();
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        String formatted = format1.format(dt_app);
+             
+        //sdf = new SimpleDateFormat("yyyy-MM-dd");
+        
+        conn = EHIS.getConnection();
+
+        try {
+            //pst = conn.prepareStatement("Select AppTime, AppType FROM Appointment JOIN Login ON Login.userID = Appointment.LoginDoctorID JOIN AppointmentType ON AppointmentType.AppTypeID = Appointment.AppointmentTypeAppTypeID WHERE Login.FName=? AND Appointment.AppDate =? ;");
+            //pst.setString(1, selectedDoc);
+            //pst.setString(2, formatted);
+            //rs = pst.executeQuery();
+            
+            stat = conn.createStatement();
+            rs1 = stat.executeQuery("SELECT * FROM Calendar JOIN Login on Login.UseID = Calendar.DoctorID WHERE Login.FName = '"+selectedDoc+"'");
+            rs = stat.executeQuery("Select AppTime, AppType FROM Appointment JOIN Login ON Login.userID = Appointment.LoginDoctorID JOIN AppointmentType ON AppointmentType.AppTypeID = Appointment.AppointmentTypeAppTypeID WHERE Login.FName = '"
+                    +selectedDoc+"' AND Appointment.AppDate = '"+formatted+"' ORDER BY AppTime DESC;");
+            
+       while (rs.next()) {
+                if (formatted.equals(rs1.getString("Date"))) {
+                    
+                    
+                    return;
+                }
+                else
+                    JOptionPane.showMessageDialog(null, "not a working day for the selected doctor");
+            }
+            
+                    if(!rs.next())
+                    {
+                       AvTime.setText("9:00 AM");
+                       return;
+                    }
+                    formatter = DateTimeFormat.forPattern("HH:mm");
+                    time = formatter.parseLocalTime(rs.getString("AppTime"));
+                    
+                    switch (rs.getString("AppType")) 
+                    {
+                        
+                        case "Annual Physical Exam":
+                            
+                            time = time.plusMinutes(40);
+                            AvTime.setText(time.toString());   
+                            break;
+                        case "Follow up":
+                            
+                            time = time.plusMinutes(30);
+                            AvTime.setText(time.toString());
+                            break;
+                        case "Regular Appointment":
+                           
+                            time = time.plusMinutes(20);
+                            AvTime.setText(time.toString());
+                            break;
+                         
+                    }
+            
+                  
+                
+                //doctorCombo.addItem(rs.getString("FName"));
+            
+
+        
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CheckAppActionPerformed
+
+    private void AvTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AvTimeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AvTimeActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField AvTime;
+    private javax.swing.JButton CheckApp;
+    private com.toedter.calendar.JDateChooser DateChoosen;
     private javax.swing.JButton cancelButton;
-    private javax.swing.JComboBox dateCombo;
     private javax.swing.JComboBox doctorCombo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JButton submitButton;
     private javax.swing.JComboBox typeCombo;
     // End of variables declaration//GEN-END:variables
