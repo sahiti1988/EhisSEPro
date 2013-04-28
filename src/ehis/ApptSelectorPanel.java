@@ -27,7 +27,8 @@ public class ApptSelectorPanel extends javax.swing.JPanel {
     ResultSet rs1 =null;
     PreparedStatement pst = null;
     Statement stat;
-    Calender cal = null;
+    Statement stat1;
+    Calendar cal = null;
     DateTimeFormatter formatter=null;
     LocalTime time=null;
 
@@ -201,57 +202,58 @@ public class ApptSelectorPanel extends javax.swing.JPanel {
             //pst.setString(2, formatted);
             //rs = pst.executeQuery();
             
+            stat1 = conn.createStatement();
+            rs1 = stat.executeQuery("SELECT Date FROM Calendar JOIN Login on Login.UserID = Calendar.DoctorID WHERE Login.FName = '"+selectedDoc+"'");
             stat = conn.createStatement();
-            rs1 = stat.executeQuery("SELECT * FROM Calendar JOIN Login on Login.UseID = Calendar.DoctorID WHERE Login.FName = '"+selectedDoc+"'");
             rs = stat.executeQuery("Select AppTime, AppType FROM Appointment JOIN Login ON Login.userID = Appointment.LoginDoctorID JOIN AppointmentType ON AppointmentType.AppTypeID = Appointment.AppointmentTypeAppTypeID WHERE Login.FName = '"
-                    +selectedDoc+"' AND Appointment.AppDate = '"+formatted+"' ORDER BY AppTime DESC;");
+            +selectedDoc+"' AND Appointment.AppDate = '"+formatted+"' ORDER BY AppTime DESC;");
             
-       while (rs.next()) {
-                if (formatted.equals(rs1.getString("Date"))) {
+            if(!rs1.next())
+                JOptionPane.showMessageDialog(null, "not a working day for the selected doctor");
+            while(rs1.next()) {
+               if (formatted.equals(rs1.getString("Date"))) 
+               {
+                   if(!rs.next())
+                   {
+                     AvTime.setText(rs1.getString("StartTime"));
+                     return;
+                   }
+       formatter = DateTimeFormat.forPattern("HH:mm");
+       time = formatter.parseLocalTime(rs.getString("AppTime"));
                     
-                    
-                    return;
-                }
-                else
-                    JOptionPane.showMessageDialog(null, "not a working day for the selected doctor");
-            }
-            
-                    if(!rs.next())
-                    {
-                       AvTime.setText("9:00 AM");
-                       return;
-                    }
-                    formatter = DateTimeFormat.forPattern("HH:mm");
-                    time = formatter.parseLocalTime(rs.getString("AppTime"));
-                    
-                    switch (rs.getString("AppType")) 
-                    {
+       switch (rs.getString("AppType")) 
+       {
                         
-                        case "Annual Physical Exam":
+                    case "Annual Physical Exam":
                             
-                            time = time.plusMinutes(40);
-                            AvTime.setText(time.toString());   
-                            break;
-                        case "Follow up":
+                         time = time.plusMinutes(40);
+                         AvTime.setText(time.toString());   
+                         break;
+                    
+                    case "Follow up":
                             
-                            time = time.plusMinutes(30);
-                            AvTime.setText(time.toString());
-                            break;
-                        case "Regular Appointment":
+                         time = time.plusMinutes(30);
+                         AvTime.setText(time.toString());
+                         break;
+                        
+                    case "Regular Appointment":
                            
-                            time = time.plusMinutes(20);
-                            AvTime.setText(time.toString());
-                            break;
+                         time = time.plusMinutes(20);
+                         AvTime.setText(time.toString());
+                         break;
                          
-                    }
-            
-                  
+       }
+                   
+               }
                 
+                    
+            }
+       
+             
                 //doctorCombo.addItem(rs.getString("FName"));
             
-
-        
-        } catch (Exception e) {
+        } catch (Exception e) 
+        {
             JOptionPane.showMessageDialog(null, e);
         }
         
