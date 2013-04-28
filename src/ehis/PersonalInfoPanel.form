@@ -19,19 +19,15 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="lbl_DOB" alignment="0" min="-2" pref="144" max="-2" attributes="0"/>
-                          <Component id="lbl_Phone" alignment="0" min="-2" pref="144" max="-2" attributes="0"/>
-                          <Component id="lbl_Address" alignment="0" max="32767" attributes="0"/>
-                          <Component id="lbl_Name" alignment="0" pref="213" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="lbl_Username" min="-2" pref="111" max="-2" attributes="0"/>
+                  <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="lbl_DOB" alignment="0" min="-2" pref="144" max="-2" attributes="0"/>
+                      <Component id="lbl_Phone" alignment="0" min="-2" pref="144" max="-2" attributes="0"/>
+                      <Component id="lbl_Address" alignment="0" max="32767" attributes="0"/>
+                      <Component id="lbl_Name" alignment="0" pref="213" max="32767" attributes="0"/>
                   </Group>
                   <Component id="btn_Edit" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="49" max="32767" attributes="0"/>
+              <EmptySpace pref="170" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -39,10 +35,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lbl_Name" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lbl_Username" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <Component id="lbl_Name" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="lbl_Address" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -84,11 +77,6 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_EditActionPerformed"/>
       </Events>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lbl_Username">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Username: "/>
-      </Properties>
     </Component>
   </SubComponents>
 </Form>

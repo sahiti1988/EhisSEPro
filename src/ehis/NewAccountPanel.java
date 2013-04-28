@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.regex.Pattern;
 import javax.swing.*;
 
@@ -278,7 +277,7 @@ public class NewAccountPanel extends javax.swing.JPanel {
         String phoneNum = txt_phnum.getText();
         String email = txt_email.getText();
         String address = txt_address.getText();
-        Date dt_dob = txt_dob.getDate();
+        java.util.Date dt_dob = txt_dob.getDate();
 
 
         //ENFORCE POLICIES
@@ -289,7 +288,7 @@ public class NewAccountPanel extends javax.swing.JPanel {
             return;
         }
 
-        if (!dt_dob.before(new Date())) {
+        if (!dt_dob.before(new java.util.Date())) {
             JOptionPane.showMessageDialog(null, "Date of Birth needs to be before today!");
             return;
         }
@@ -345,10 +344,11 @@ public class NewAccountPanel extends javax.swing.JPanel {
             sql = "INSERT INTO Login (userID, Password, FName, LName, PhoneNum, Email, Address, DOB, UserTypeTypeID)"
                     + "VALUES('" + username + "','" + password
                     + "','" + firstName + "','" + lastName + "','" + phoneNum
-                    + "','" + email + "','" + address + "','" + dob
+                    + "','" + email + "','" + address + "','" + "?"
                     + "','" + rs.getInt("TypeID") + "');";
 
             pst = conn.prepareStatement(sql);
+            pst.setDate(1, new java.sql.Date(dt_dob.getTime()));
             pst.executeUpdate();
             clear();
             JOptionPane.showMessageDialog(null, "New Account Created");
