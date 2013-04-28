@@ -7,8 +7,6 @@ package ehis;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,15 +19,6 @@ public class DoctorNursePanel extends javax.swing.JPanel {
     PreparedStatement pst = null;
     
     EHIS ehis;
-
-    /**
-     * Creates new form DoctorPanel
-     */
-//    public DoctorNursePanel(String username) {
-//        initComponents();
-//        ehis = EHIS.getEhis();
-//        btn_Edit.setAllFields(username);        
-//    }
 
     DoctorNursePanel(String username) {
         initComponents();
@@ -109,11 +98,11 @@ public class DoctorNursePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_Manage_Patient_RecordActionPerformed
 
     private void btn_View_Edit_CalenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_View_Edit_CalenderActionPerformed
-        Calender jframe = new Calender();
-        //panel.setPanel(this);
-        ehis.setContentPane(jframe);
-        //ehis.pack();
-        //ehis.validate();
+        //Calender jframe = new Calender();
+        CalendarDoctor panel = new CalendarDoctor();
+        ehis.setContentPane(panel);
+        ehis.pack();
+        ehis.validate();
     }//GEN-LAST:event_btn_View_Edit_CalenderActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

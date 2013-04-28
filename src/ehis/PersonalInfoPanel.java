@@ -32,23 +32,21 @@ public class PersonalInfoPanel extends javax.swing.JPanel {
             String sql = "SELECT * from Login where userID= '" + username + "';";
             pst = conn.prepareStatement(sql);
             rs = pst.executeQuery();
-            System.out.println("Boom");
             //for displaying name on the label
             String firstname = rs.getString("FName");
             String lastname = rs.getString("LName");
             lbl_Name.setText("Name: "+ firstname + " " +lastname);
 
             String address = rs.getString("Address");
-            lbl_Address.setText(address);
+            lbl_Address.setText("Address: " + address);
 
             java.sql.Date date = rs.getDate("DOB");
-            System.out.println("Date:" + date);
             java.sql.Date dob = new java.sql.Date(date.getTime());
             //lbl_DOB.setText(dob.toString());
-            lbl_DOB.setText(date.toString());
+            lbl_DOB.setText("DOB: " + date.toString());
 
             String phone = rs.getString("PhoneNum");
-            lbl_Phone.setText(phone);
+            lbl_Phone.setText("Phone: " + phone);
 
             }
         catch(Exception e){
@@ -70,7 +68,6 @@ public class PersonalInfoPanel extends javax.swing.JPanel {
         lbl_DOB = new javax.swing.JLabel();
         lbl_Phone = new javax.swing.JLabel();
         btn_Edit = new javax.swing.JButton();
-        lbl_Username = new javax.swing.JLabel();
 
         lbl_Name.setText("Name: Firstname Lastname");
 
@@ -87,8 +84,6 @@ public class PersonalInfoPanel extends javax.swing.JPanel {
             }
         });
 
-        lbl_Username.setText("Username: ");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -96,24 +91,19 @@ public class PersonalInfoPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lbl_DOB, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbl_Phone, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbl_Address, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lbl_Name, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lbl_Username, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(lbl_DOB, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbl_Phone, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbl_Address, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lbl_Name, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE))
                     .addComponent(btn_Edit))
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addContainerGap(170, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_Name)
-                    .addComponent(lbl_Username))
+                .addComponent(lbl_Name)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbl_Address)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -141,6 +131,5 @@ public class PersonalInfoPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lbl_DOB;
     private javax.swing.JLabel lbl_Name;
     private javax.swing.JLabel lbl_Phone;
-    private javax.swing.JLabel lbl_Username;
     // End of variables declaration//GEN-END:variables
 }
