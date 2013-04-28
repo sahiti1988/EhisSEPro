@@ -4,10 +4,17 @@
  */
 package ehis;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
@@ -22,13 +29,14 @@ public class CalendarDoctor extends javax.swing.JPanel {
      */
     public CalendarDoctor() {
         initComponents();
-        setAllFields();
+        initialize();
     }
     
-    public void setAllFields(){
+    public void initialize(){
         
         df = DateFormat.getDateInstance(DateFormat.MEDIUM);
         
+        //calendar listener
         cal_Chooser.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
@@ -37,7 +45,30 @@ public class CalendarDoctor extends javax.swing.JPanel {
                 lab_Date.setText(df.format(cal_Chooser.getDate()));
             }
         });
+        
+        //set to todays date
         cal_Chooser.setDate(new Date());
+        
+        //appointment list listener
+        tbl_appointments.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                //TODO-Add something
+            }
+        });
+        
+        btn_EndTimeEdit.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String val = JOptionPane.showInputDialog("Enter Time: ", lbl_EndTime.getText().substring(4).trim());
+                boolean isTime = Pattern.compile("^[1]?[0-9]:[0-5][0-9] [ap]m$").matcher(val).find();
+                if(!isTime) JOptionPane.showMessageDialog(null, "Wrong");
+                lbl_EndTime.setText("End: " + val);
+             }
+        });
+        
     }
     
     /**
@@ -50,16 +81,15 @@ public class CalendarDoctor extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbl_appointments = new javax.swing.JTable();
         cal_Chooser = new com.toedter.calendar.JCalendar();
         lab_Date = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        but_StartTimeEdit = new javax.swing.JButton();
+        lbl_StartTime = new javax.swing.JLabel();
         btn_EndTimeEdit = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
+        lbl_EndTime = new javax.swing.JLabel();
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbl_appointments.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -70,20 +100,18 @@ public class CalendarDoctor extends javax.swing.JPanel {
                 "Time", "Patient", "AppointType"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tbl_appointments);
 
         lab_Date.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lab_Date.setText("Date:  Feb 7, 2013");
 
         jLabel2.setText("My Hours:");
 
-        jLabel3.setText("Start:");
-
-        but_StartTimeEdit.setText("Edit");
+        lbl_StartTime.setText("Start:");
 
         btn_EndTimeEdit.setText("Edit");
 
-        jLabel4.setText("End:");
+        lbl_EndTime.setText("End:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -95,16 +123,14 @@ public class CalendarDoctor extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lbl_EndTime)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121, Short.MAX_VALUE)
                         .addComponent(btn_EndTimeEdit))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
-                        .addComponent(but_StartTimeEdit)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(lbl_StartTime))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(21, 21, 21))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,26 +154,23 @@ public class CalendarDoctor extends javax.swing.JPanel {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addGap(27, 27, 27)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(but_StartTimeEdit))
+                        .addGap(31, 31, 31)
+                        .addComponent(lbl_StartTime)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btn_EndTimeEdit)
-                            .addComponent(jLabel4))))
+                            .addComponent(lbl_EndTime))))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_EndTimeEdit;
-    private javax.swing.JButton but_StartTimeEdit;
     private com.toedter.calendar.JCalendar cal_Chooser;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lab_Date;
+    private javax.swing.JLabel lbl_EndTime;
+    private javax.swing.JLabel lbl_StartTime;
+    private javax.swing.JTable tbl_appointments;
     // End of variables declaration//GEN-END:variables
 }
