@@ -292,7 +292,7 @@ public class NewAccountPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Date of Birth needs to be before today!");
             return;
         }
-        String dob = new SimpleDateFormat("MM/dd/yyyy").format(dt_dob);
+        //String dob = new SimpleDateFormat("MM/dd/yyyy").format(dt_dob);
 
 
         //password policies
@@ -344,12 +344,15 @@ public class NewAccountPanel extends javax.swing.JPanel {
             sql = "INSERT INTO Login (userID, Password, FName, LName, PhoneNum, Email, Address, DOB, UserTypeTypeID)"
                     + "VALUES('" + username + "','" + password
                     + "','" + firstName + "','" + lastName + "','" + phoneNum
-                    + "','" + email + "','" + address + "','" + "?"
+                    + "','" + email + "','" + address + "','" + dt_dob.getTime()
                     + "','" + rs.getInt("TypeID") + "');";
+            stat.executeUpdate(sql);
 
-            pst = conn.prepareStatement(sql);
-            pst.setDate(1, new java.sql.Date(dt_dob.getTime()));
-            pst.executeUpdate();
+//            pst = conn.prepareStatement(sql);
+//            System.out.println("Here");
+//            pst.setDate(1, new java.sql.Date(dt_dob.getTime()));
+//            System.out.println("boom");
+//            pst.executeUpdate();
             clear();
             JOptionPane.showMessageDialog(null, "New Account Created");
         } catch (Exception e) {
