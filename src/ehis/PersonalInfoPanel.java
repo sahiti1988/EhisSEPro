@@ -41,9 +41,11 @@ public class PersonalInfoPanel extends javax.swing.JPanel {
             String address = rs.getString("Address");
             lbl_Address.setText(address);
 
-            java.util.Date date = rs.getDate("DOB");
+            java.sql.Date date = rs.getDate("DOB");
+            System.out.println("Date:" + date);
             java.sql.Date dob = new java.sql.Date(date.getTime());
-            lbl_DOB.setText(dob.toString());
+            //lbl_DOB.setText(dob.toString());
+            lbl_DOB.setText(date.toString());
 
             String phone = rs.getString("PhoneNum");
             lbl_Phone.setText(phone);

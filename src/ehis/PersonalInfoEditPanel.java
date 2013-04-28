@@ -32,6 +32,7 @@ public class PersonalInfoEditPanel extends javax.swing.JPanel {
         this.username = username;
         this.myDialog = dialog;
         initComponents();
+        ehis = EHIS.getEhis();
         conn = EHIS.getConnection();
         setAllFields(username);
     }
@@ -62,29 +63,7 @@ public class PersonalInfoEditPanel extends javax.swing.JPanel {
 
     }
 
-//    public JTextField getAddressField() {
-//        return addressField;
-//    }
-//
-//    public JTextField getDobField() {
-//        return dobField;
-//    }
-//
-//    public JTextField getFirstNameField() {
-//        return firstNameField;
-//    }
-//
-//    public JTextField getLastNameField() {
-//        return lastNameField;
-//        }
-//
-//    public JTextField getPhoneField() {
-//        return phoneField;
-//    }
-//
-//    public JLabel getTypeLabel() {
-//        return typeLabel;
-//    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -242,7 +221,7 @@ public class PersonalInfoEditPanel extends javax.swing.JPanel {
             pst = conn.prepareStatement(sql);
             //pst.setString(1, txt_First_Name.getText());  
             pst.setString(1, txt_Last_Name.getText());
-            pst.setString(2, dob.toString());
+            pst.setDate(2, dob);
             pst.setString(3, txt_Phone.getText());
             pst.setString(4, txtarea_Address.getText());
 
@@ -252,8 +231,7 @@ public class PersonalInfoEditPanel extends javax.swing.JPanel {
             pst.executeUpdate();
             JOptionPane.showMessageDialog(null, "Information saved");
 
-            PatientPanel panel = new PatientPanel();
-            ehis.setContentPane(panel);
+            myDialog.dispose();
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);

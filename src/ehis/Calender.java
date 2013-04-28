@@ -420,18 +420,7 @@ public class Calender extends javax.swing.JFrame {
            pst.setString(5, cmb_HR.getSelectedItem().toString()+ ":" + cmb_MIN.getSelectedItem().toString());
            pst.setString(6, txt_Appt_End_Time.getText().toString());
            
-//           String appt_start = cmb_HR.getSelectedItem().toString()+"" + cmb_MIN.getSelectedItem().toString();
-//           String appt_end = txt_Appt_End_Time.getText().toString();
-//           String appt_end_col = appt_end.substring(0,2)+""+appt_end.substring(3);
-//           String newsql = "select * from Calender where App_date='"+ sqlDate.toString() +"' and App_Start_Time between  '"+appt_start +"' AND '" +appt_end_col +"' ";
-//           System.out.println("newsql:" + newsql);
-//           PreparedStatement pstsql = null;
-//           pstsql = conn.prepareStatement(newsql);
-//           rs = pstsql.executeQuery();
-//           
-//           if(rs.next()){
-//               JOptionPane.showMessageDialog(null, "Appointment time is already taken.Choose other time...");
-//           }
+
            
            //pst.executeQuery();
            pst.executeUpdate(); 
@@ -440,7 +429,6 @@ public class Calender extends javax.swing.JFrame {
            JOptionPane.showMessageDialog(null, "Appointment confirmed");
         } 
         catch (NumberFormatException | SQLException | HeadlessException e) {
-          //  JOptionPane.showMessageDialog(null, "INSERT INTO Calender (Patient_ID,Patient_Name,Appointment Date,Appointment Time,Type) VALUES (?,?,?,?,?)");
             JOptionPane.showMessageDialog(null, e);
         }
     }//GEN-LAST:event_btn_Make_AppointmentActionPerformed
@@ -487,12 +475,12 @@ public class Calender extends javax.swing.JFrame {
     }//GEN-LAST:event_cmb_MINItemStateChanged
 
     private void btn_ClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ClearActionPerformed
-        // TODO add your handling code here:
+        
         clear();
     }//GEN-LAST:event_btn_ClearActionPerformed
 
     private void table_CalenderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_CalenderMouseClicked
-        // TODO add your handling code here:
+       
         try{
             int row = table_Calender.getSelectedRow();
             String Table_click = table_Calender.getModel().getValueAt(row, 0).toString();
@@ -529,13 +517,10 @@ public class Calender extends javax.swing.JFrame {
                  cmb_MIN.setSelectedItem(onlyHrTime);                
                  String appEndTime = rs.getString("App_End_Time");             
                  txt_Appt_End_Time.setText(appEndTime);
-                 
-
             }
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, e);
-        }
-        
+        }      
         
     }//GEN-LAST:event_table_CalenderMouseClicked
 
@@ -548,13 +533,12 @@ public class Calender extends javax.swing.JFrame {
     private void textfieldCalenInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_textfieldCalenInputMethodTextChanged
         String selectedDate = txt_Show_Appointments.getDateFormatString();
         System.out.println("selectedDateinput:" +selectedDate);
-//        String datefield = showdatefield.getText();
-//                System.out.println("datefield:" +datefield);
+
 
     }//GEN-LAST:event_textfieldCalenInputMethodTextChanged
 
     private void textfieldCalenFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textfieldCalenFocusLost
-        // TODO add your handling code here:
+        
         String selectedDate = txt_Show_Appointments.getDateFormatString();
         System.out.println("focus:" +selectedDate);
     }//GEN-LAST:event_textfieldCalenFocusLost
@@ -578,7 +562,7 @@ public class Calender extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_show_AppointmentsActionPerformed
 
     private void btn_show_All_AppointmentsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_show_All_AppointmentsActionPerformed
-        // TODO add your handling code here:
+        
         Update_table();
     }//GEN-LAST:event_btn_show_All_AppointmentsActionPerformed
 

@@ -35,41 +35,7 @@ public class DoctorNursePanel extends javax.swing.JPanel {
         initComponents();
         conn = EHIS.getConnection();
         ehis = EHIS.getEhis();
-        //btn_Edit.setAllFields(username);  
-        setAllFields(username);
-    }
-
-    public void setAllFields(String username){
-        try{
-            //this.username = username;
-            String sql = "SELECT * from User_Info where Username=?";
-
-            pst = conn.prepareStatement(sql);
-            pst.setString(1, username);  
-            rs = pst.executeQuery();
-            
-            //for displaying name on the label
-            String firstname = rs.getString("FirstName");
-            String lastname = rs.getString("LastName");
-            lbl_Name.setText("Name: "+ firstname + " " +lastname);
-            
-            String address = rs.getString("Address");
-            lbl_Address.setText(address);
-            
-            java.util.Date date = rs.getDate("DOB");           
-            java.sql.Date dob = new java.sql.Date(date.getTime());  
-            lbl_DOB.setText(dob.toString());
-            
-            String phone = rs.getString("Phone");
-            lbl_Phone.setText(phone);     
-            
-            lbl_Username.setText(username);
-            
-            //JOptionPane.showMessageDialog(null, "Information saved");
-            }
-        catch(Exception e){
-            JOptionPane.showMessageDialog(null, e);                    
-        }       
+        personalInfoPanel1.setAllFields(username);
     }
 
     /**
@@ -84,13 +50,7 @@ public class DoctorNursePanel extends javax.swing.JPanel {
         btn_View_Edit_Calender = new javax.swing.JButton();
         btn_Manage_Patient_Record = new javax.swing.JButton();
         btn_Logout = new ehis.LogoutPanel();
-        jPanel1 = new javax.swing.JPanel();
-        btn_Edit = new javax.swing.JButton();
-        lbl_DOB = new javax.swing.JLabel();
-        lbl_Address = new javax.swing.JLabel();
-        lbl_Phone = new javax.swing.JLabel();
-        lbl_Name = new javax.swing.JLabel();
-        lbl_Username = new javax.swing.JLabel();
+        personalInfoPanel1 = new ehis.PersonalInfoPanel();
 
         btn_View_Edit_Calender.setText("View/Edit Calendar");
         btn_View_Edit_Calender.addActionListener(new java.awt.event.ActionListener() {
@@ -106,91 +66,29 @@ public class DoctorNursePanel extends javax.swing.JPanel {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(0, 51, 255), null));
-
-        btn_Edit.setText("Edit");
-        btn_Edit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_EditActionPerformed(evt);
-            }
-        });
-
-        lbl_DOB.setText("DOB");
-
-        lbl_Address.setText("Address:");
-
-        lbl_Phone.setText("Phone");
-
-        lbl_Name.setText("Name: ");
-
-        lbl_Username.setText("Username: ");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lbl_Address)
-                            .addComponent(lbl_DOB)
-                            .addComponent(lbl_Phone)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(33, 33, 33)
-                                .addComponent(btn_Edit)))
-                        .addGap(269, 269, 269))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lbl_Name)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lbl_Username)
-                        .addGap(26, 26, 26))))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_Username)
-                    .addComponent(lbl_Name))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lbl_Address)
-                .addGap(18, 18, 18)
-                .addComponent(lbl_DOB)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbl_Phone)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btn_Edit)
-                .addContainerGap())
-        );
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btn_Manage_Patient_Record, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_View_Edit_Calender, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btn_Logout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGap(58, 58, 58)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btn_Manage_Patient_Record, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_View_Edit_Calender, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btn_Logout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(52, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(personalInfoPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(personalInfoPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
+                        .addGap(46, 46, 46)
                         .addComponent(btn_View_Edit_Calender)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_Manage_Patient_Record)
@@ -218,25 +116,10 @@ public class DoctorNursePanel extends javax.swing.JPanel {
         //ehis.validate();
     }//GEN-LAST:event_btn_View_Edit_CalenderActionPerformed
 
-    private void btn_EditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_EditActionPerformed
-        String username = DoctorNursePanel.this.lbl_Username.getText();
-        JDialog dialog = new JDialog(ehis, "Personal Info Edit", true);
-        PersonalInfoEditPanel panel = new PersonalInfoEditPanel(username, dialog);
-        dialog.setContentPane(panel);
-        dialog.pack();
-        dialog.setVisible(true);
-    }//GEN-LAST:event_btn_EditActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn_Edit;
     private ehis.LogoutPanel btn_Logout;
     private javax.swing.JButton btn_Manage_Patient_Record;
     private javax.swing.JButton btn_View_Edit_Calender;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lbl_Address;
-    private javax.swing.JLabel lbl_DOB;
-    private javax.swing.JLabel lbl_Name;
-    private javax.swing.JLabel lbl_Phone;
-    private javax.swing.JLabel lbl_Username;
+    private ehis.PersonalInfoPanel personalInfoPanel1;
     // End of variables declaration//GEN-END:variables
 }
