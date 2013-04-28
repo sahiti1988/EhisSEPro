@@ -56,6 +56,8 @@ public class PersonalInfoEditPanel extends javax.swing.JPanel {
             txt_Last_Name.setText(rs1.getString("LName"));
             txt_Phone.setText(rs1.getString("PhoneNum"));
             txtarea_Address.setText(rs1.getString("Address"));
+            
+            txt_DOB.setDate(new java.util.Date(rs1.getDate("DOB").getTime()));
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
