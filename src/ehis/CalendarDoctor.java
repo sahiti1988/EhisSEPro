@@ -4,15 +4,17 @@
  */
 package ehis;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.regex.Pattern;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -22,55 +24,65 @@ import javax.swing.event.ListSelectionListener;
  */
 public class CalendarDoctor extends javax.swing.JPanel {
     
-    DateFormat df;
+    String docID;
+
 
     /**
      * Creates new form CalendarDoctor
      */
-    public CalendarDoctor() {
+    public CalendarDoctor(String dID) {
         initComponents();
-        initialize();
-    }
-    
-    public void initialize(){
-        
-        df = DateFormat.getDateInstance(DateFormat.MEDIUM);
-        
+        docID = dID;
+
         //calendar listener
         cal_Chooser.addPropertyChangeListener(new PropertyChangeListener() {
-
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                
-                lab_Date.setText(df.format(cal_Chooser.getDate()));
+                try {
+                    String date = TimeAndDate.dateToDateString(cal_Chooser.getDate());
+                    
+                    String where = "WHERE DoctorID = '" + docID + "' AND Date = '" + date + "'";
+                    //get existing record and/or delete
+                    
+                    Statement stat = EHIS.getConnection().createStatement();
+                    String sql = "SELECT * FROM calendar " + where;
+                    ResultSet rs = stat.executeQuery(sql);
+                    lab_Date.setText(date);
+                    if(rs.next()){
+                        String endTime = rs.getString("EndTime");
+                        String startTime = rs.getString("StartTime");
+
+                        lbl_StartTime.setText(docID);
+                        lbl_EndTime.setText("End: " + endTime);
+                        lbl_StartTime.setText("Start: " + startTime);
+                        
+                    } else{
+                        lbl_EndTime.setText("End: ");
+                        lbl_StartTime.setText("Start: ");
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(CalendarDoctor.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
-        
+
         //set to todays date
         cal_Chooser.setDate(new Date());
-        
+
         //appointment list listener
         tbl_appointments.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 //TODO-Add something
             }
         });
         
-        btn_EndTimeEdit.addActionListener(new ActionListener() {
+    }
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String val = JOptionPane.showInputDialog("Enter Time: ", lbl_EndTime.getText().substring(4).trim());
-                boolean isTime = Pattern.compile("^[1]?[0-9]:[0-5][0-9] [ap]m$").matcher(val).find();
-                if(!isTime) JOptionPane.showMessageDialog(null, "Wrong");
-                lbl_EndTime.setText("End: " + val);
-             }
-        });
+    public void refresh() {
         
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -110,6 +122,11 @@ public class CalendarDoctor extends javax.swing.JPanel {
         lbl_StartTime.setText("Start:");
 
         btn_EndTimeEdit.setText("Edit");
+        btn_EndTimeEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_EndTimeEditActionPerformed(evt);
+            }
+        });
 
         lbl_EndTime.setText("End:");
 
@@ -163,6 +180,16 @@ public class CalendarDoctor extends javax.swing.JPanel {
                 .addContainerGap(22, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btn_EndTimeEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_EndTimeEditActionPerformed
+        JDialog dialog = new JDialog(EHIS.getEhis(), "Edit Hours", true);
+        DoctorHoursPanel panel = new DoctorHoursPanel(dialog, TimeAndDate.dateToDateString(cal_Chooser.getDate()), docID);
+        dialog.setContentPane(panel);
+        dialog.pack();
+        dialog.setVisible(true);
+        refresh();
+        
+    }//GEN-LAST:event_btn_EndTimeEditActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_EndTimeEdit;
     private com.toedter.calendar.JCalendar cal_Chooser;

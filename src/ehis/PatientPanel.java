@@ -22,7 +22,7 @@ public class PatientPanel extends javax.swing.JPanel {
     PatientPanel(String username) {
         this();
         PersonalInfoPanel personalPanel = patientRec_PatRecepView1.getPersonalInfoPanel();
-        
+        patientRec_PatRecepView1.setPatientID(username);
         personalPanel.setAllFields(username);
         personalPanel.validate();
     }

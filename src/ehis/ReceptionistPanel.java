@@ -4,15 +4,12 @@
  */
 package ehis;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -57,8 +54,8 @@ public class ReceptionistPanel extends javax.swing.JPanel {
             public void valueChanged(ListSelectionEvent e) {
                 int index = listPatient.getSelectedIndex();
                 patientRec_PatRecepView1.getPersonalInfoPanel().setAllFields(patientIDs.get(index));
+                patientRec_PatRecepView1.setPatientID(patientIDs.get(index));
                 validate();
-                
             }
         });
     }

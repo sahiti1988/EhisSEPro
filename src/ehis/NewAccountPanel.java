@@ -342,17 +342,18 @@ public class NewAccountPanel extends javax.swing.JPanel {
             sql = "SELECT TypeID FROM UserType WHERE type = '" + selecteditem + "';";
             rs = stat.executeQuery(sql);
             sql = "INSERT INTO Login (userID, Password, FName, LName, PhoneNum, Email, Address, DOB, UserTypeTypeID)"
-                    + "VALUES('" + username + "','" + password
-                    + "','" + firstName + "','" + lastName + "','" + phoneNum
-                    + "','" + email + "','" + address + "','" + dt_dob.getTime()
-                    + "','" + rs.getInt("TypeID") + "');";
+                    + "VALUES('" + 
+                    username  + "','" + 
+                    password  + "','" + 
+                    firstName + "','" + 
+                    lastName  + "','" + 
+                    phoneNum  + "','" + 
+                    email     + "','" + 
+                    address   + "','" + 
+                    dt_dob.getTime()+ "','" + 
+                    rs.getInt("TypeID") + "');";
             stat.executeUpdate(sql);
 
-//            pst = conn.prepareStatement(sql);
-//            System.out.println("Here");
-//            pst.setDate(1, new java.sql.Date(dt_dob.getTime()));
-//            System.out.println("boom");
-//            pst.executeUpdate();
             clear();
             JOptionPane.showMessageDialog(null, "New Account Created");
         } catch (Exception e) {

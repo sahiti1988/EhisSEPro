@@ -17,11 +17,13 @@ public class DoctorNursePanel extends javax.swing.JPanel {
     Connection conn = null;
     ResultSet rs = null;
     PreparedStatement pst = null;
+    String username;
     
     EHIS ehis;
 
     DoctorNursePanel(String username) {
         initComponents();
+        this.username = username;
         conn = EHIS.getConnection();
         ehis = EHIS.getEhis();
         personalInfoPanel1.setAllFields(username);
@@ -98,7 +100,7 @@ public class DoctorNursePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_Manage_Patient_RecordActionPerformed
 
     private void btn_View_Edit_CalenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_View_Edit_CalenderActionPerformed
-        CalendarDoctor panel = new CalendarDoctor();
+        CalendarDoctor panel = new CalendarDoctor(username);
         ehis.setContentPane(panel);
         ehis.pack();
         ehis.validate();

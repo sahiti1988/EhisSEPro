@@ -4,53 +4,58 @@
  */
 package ehis;
 
+import java.awt.Dialog;
 import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import javax.swing.*;
-import org.joda.time.*;
-import org.joda.time.format.*;
 
 /**
  *
  * @author Joe
  */
 public class ApptSelectorPanel extends javax.swing.JPanel {
-    
-    Connection conn = null;
-    ResultSet rs = null;
-    ResultSet rs1 =null;
-    PreparedStatement pst = null;
+
+    Connection conn;
+    ResultSet rs;
     Statement stat;
-    Statement stat1;
-    Calendar cal = null;
-    DateTimeFormatter formatter=null;
-    LocalTime time=null;
+    Vector<String> docUserIDs;
+    Dialog dialog;
+    
+    int selectedAppTypeID;
+    String selectedDoc;
+    String patientID;
+    Date nextAvailableTime;
+    String selectedDate;
 
     /**
      * Creates new form AppointmentPanel
      */
-    public ApptSelectorPanel() {
+    public ApptSelectorPanel(String patientID, Dialog dialog) {
         initComponents();
-        
+        this.dialog = dialog;
+        this.patientID = patientID;
+        docUserIDs = new Vector<>();
         conn = EHIS.getConnection();
 
         try {
+
+            //populate doctors
             stat = conn.createStatement();
             rs = stat.executeQuery("Select * from Login JOIN UserType On UserType.TypeID = Login.UserTypeTypeID WHERE UserType.Type = 'Doctor';");
             while (rs.next()) {
-                doctorCombo.addItem(rs.getString("FName"));
+                doctorCombo.addItem(rs.getString("FName") + " " + rs.getString("LName"));
+                docUserIDs.add(rs.getString("UserID"));
             }
+
+            //populate appointment types
             rs = stat.executeQuery("Select * from AppointmentType;");
             while (rs.next()) {
                 typeCombo.addItem(rs.getString("AppType"));
             }
-            
+
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -75,9 +80,9 @@ public class ApptSelectorPanel extends javax.swing.JPanel {
         submitButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        DateChoosen = new com.toedter.calendar.JDateChooser();
+        field_Date = new com.toedter.calendar.JDateChooser();
         CheckApp = new javax.swing.JButton();
-        AvTime = new javax.swing.JTextField();
+        fieldAvailableTime = new javax.swing.JTextField();
 
         jLabel1.setText("Doctor");
 
@@ -95,20 +100,24 @@ public class ApptSelectorPanel extends javax.swing.JPanel {
         });
 
         cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Next Available Time:");
 
         CheckApp.setText("Check Availability");
-        CheckApp.setActionCommand("Check Availability");
         CheckApp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CheckAppActionPerformed(evt);
             }
         });
 
-        AvTime.addActionListener(new java.awt.event.ActionListener() {
+        fieldAvailableTime.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AvTimeActionPerformed(evt);
+                fieldAvailableTimeActionPerformed(evt);
             }
         });
 
@@ -139,10 +148,10 @@ public class ApptSelectorPanel extends javax.swing.JPanel {
                                     .addComponent(doctorCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(152, 152, 152)))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(DateChoosen, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(field_Date, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(CheckApp))
-                            .addComponent(AvTime, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(fieldAvailableTime, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -155,7 +164,7 @@ public class ApptSelectorPanel extends javax.swing.JPanel {
                         .addGap(126, 126, 126)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
-                            .addComponent(AvTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(fieldAvailableTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(submitButton)
@@ -173,7 +182,7 @@ public class ApptSelectorPanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(CheckApp)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(DateChoosen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(field_Date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel4)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -181,95 +190,129 @@ public class ApptSelectorPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
-        // TODO add your handling code here:
+        String val = fieldAvailableTime.getText();
+        System.out.println("val: "+ val);
+        System.out.println("date" +selectedDate);
+        System.out.println("nextTime:" + nextAvailableTime);
+        System.out.println("PatID: " + patientID);
+        System.out.println("DocID " + selectedDoc );
+        System.out.println("apptTim: " + selectedAppTypeID);
+        if(val.equals("") || val.charAt(0) == 'N')
+            JOptionPane.showMessageDialog(this, "Must get Available time!");
+        else {
+            
+            String sql = "INSERT INTO appointment(AppDate, AppTime, LoginPatientID, LoginDoctorID, AppointmentTypeAppTypeID) VALUES ('" +
+                    selectedDate + "','" +
+                    TimeAndDate.dateToTimeString(nextAvailableTime) + "','" +
+                    patientID + "','" +
+                    selectedDoc + "'," +
+                    selectedAppTypeID + ");";
+            System.out.println(sql);
+            try {
+                stat.execute(sql);
+            } catch (SQLException ex) {
+                Logger.getLogger(ApptSelectorPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            dialog.dispose();
+            
+        }
     }//GEN-LAST:event_submitButtonActionPerformed
 
     private void CheckAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckAppActionPerformed
-     
-        String selectedDoc = doctorCombo.getSelectedItem().toString();
+
+        selectedDoc = docUserIDs.get(doctorCombo.getSelectedIndex());
         String selectedType = typeCombo.getSelectedItem().toString();
-        Date dt_app = DateChoosen.getDate();
-        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-        String formatted = format1.format(dt_app);
-             
-        //sdf = new SimpleDateFormat("yyyy-MM-dd");
+
         
-        conn = EHIS.getConnection();
+                    switch(selectedType.charAt(0)){
+                        case 'A': selectedAppTypeID = 1;break;
+                        case 'F': selectedAppTypeID = 2;break;
+                        case 'R': selectedAppTypeID = 3;break;
+                    }
+        selectedDate = TimeAndDate.dateToDateString(field_Date.getDate());
 
         try {
-            //pst = conn.prepareStatement("Select AppTime, AppType FROM Appointment JOIN Login ON Login.userID = Appointment.LoginDoctorID JOIN AppointmentType ON AppointmentType.AppTypeID = Appointment.AppointmentTypeAppTypeID WHERE Login.FName=? AND Appointment.AppDate =? ;");
-            //pst.setString(1, selectedDoc);
-            //pst.setString(2, formatted);
-            //rs = pst.executeQuery();
             
-            stat1 = conn.createStatement();
-            rs1 = stat.executeQuery("SELECT Date FROM Calendar JOIN Login on Login.UserID = Calendar.DoctorID WHERE Login.FName = '"+selectedDoc+"'");
-            stat = conn.createStatement();
-            rs = stat.executeQuery("Select AppTime, AppType FROM Appointment JOIN Login ON Login.userID = Appointment.LoginDoctorID JOIN AppointmentType ON AppointmentType.AppTypeID = Appointment.AppointmentTypeAppTypeID WHERE Login.FName = '"
-            +selectedDoc+"' AND Appointment.AppDate = '"+formatted+"' ORDER BY AppTime DESC;");
-            
-            if(!rs1.next())
-                JOptionPane.showMessageDialog(null, "not a working day for the selected doctor");
-            while(rs1.next()) {
-               if (formatted.equals(rs1.getString("Date"))) 
-               {
-                   if(!rs.next())
-                   {
-                     AvTime.setText(rs1.getString("StartTime"));
-                     return;
-                   }
-       formatter = DateTimeFormat.forPattern("HH:mm");
-       time = formatter.parseLocalTime(rs.getString("AppTime"));
-                    
-       switch (rs.getString("AppType")) 
-       {
-                        
-                    case "Annual Physical Exam":
-                            
-                         time = time.plusMinutes(40);
-                         AvTime.setText(time.toString());   
-                         break;
-                    
-                    case "Follow up":
-                            
-                         time = time.plusMinutes(30);
-                         AvTime.setText(time.toString());
-                         break;
-                        
-                    case "Regular Appointment":
-                           
-                         time = time.plusMinutes(20);
-                         AvTime.setText(time.toString());
-                         break;
-                         
-       }
-                   
-               }
+            //get doctor start and end time for selected date
+            rs = stat.executeQuery("SELECT StartTime, EndTime FROM calendar WHERE DoctorID = '"
+                    + selectedDoc + "' AND Date = '" + selectedDate + "';");
+
+            //if doc not working say so
+            if (!rs.next()) {
+                fieldAvailableTime.setText("No Times Available!");
                 
+            //else find next available time
+            } else {
+                
+                Date docStartTime = TimeAndDate.timeStringToDate(rs.getString("StartTime"));
+                Date docEndTime = TimeAndDate.timeStringToDate(rs.getString("EndTime"));
+                
+                //get all appointments for selected date
+                rs = stat.executeQuery("SELECT * FROM appointment WHERE LoginDoctorID = '" + 
+                        selectedDoc + "' AND AppDate = '" + selectedDate + "';");
+                
+                //if no appointments start time is next time
+                if(!rs.next()){
                     
+                    if(docEndTime.after(addAppointment(docStartTime, selectedAppTypeID))){
+                        nextAvailableTime = docStartTime;
+                        fieldAvailableTime.setText(TimeAndDate.dateToTimeString(docStartTime));
+                        
+                    }
+                    else{
+                        fieldAvailableTime.setText("No Times Available!");
+                    }
+                //else find latest time available
+                } else {
+                    nextAvailableTime = TimeAndDate.timeStringToDate(rs.getString("AppTime"));
+                    while(rs.next()){
+                        Date thisTime = TimeAndDate.timeStringToDate(rs.getString("AppTime"));
+                        
+                        if(thisTime.after(nextAvailableTime)){
+                            nextAvailableTime = thisTime; 
+                        }
+                    }
+                    if(docEndTime.after(addAppointment(nextAvailableTime, selectedAppTypeID)))
+                        fieldAvailableTime.setText(TimeAndDate.dateToTimeString(nextAvailableTime));
+                    else{
+                        fieldAvailableTime.setText("No Times Available!");
+                    }
+                }
             }
-       
-             
-                //doctorCombo.addItem(rs.getString("FName"));
-            
-        } catch (Exception e) 
-        {
+
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
-        
-        // TODO add your handling code here:
     }//GEN-LAST:event_CheckAppActionPerformed
 
-    private void AvTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AvTimeActionPerformed
+    private Date addAppointment(Date date, int appType){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        switch(appType){
+            case 1:
+                cal.add(Calendar.MINUTE, 40); break;
+            case 2:
+                cal.add(Calendar.MINUTE, 30); break;
+            case 3:
+                cal.add(Calendar.MINUTE, 20); break;
+        }
+        return cal.getTime();
+    }
+    
+    private void fieldAvailableTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldAvailableTimeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_AvTimeActionPerformed
+    }//GEN-LAST:event_fieldAvailableTimeActionPerformed
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        dialog.dispose();
+    }//GEN-LAST:event_cancelButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField AvTime;
     private javax.swing.JButton CheckApp;
-    private com.toedter.calendar.JDateChooser DateChoosen;
     private javax.swing.JButton cancelButton;
     private javax.swing.JComboBox doctorCombo;
+    private javax.swing.JTextField fieldAvailableTime;
+    private com.toedter.calendar.JDateChooser field_Date;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

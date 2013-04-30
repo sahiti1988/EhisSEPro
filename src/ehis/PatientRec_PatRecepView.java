@@ -13,7 +13,7 @@ import javax.swing.JDialog;
 public class PatientRec_PatRecepView extends javax.swing.JPanel {
     
     EHIS ehis;
-
+    String patientID;
     /**
      * Creates new form PatientRec_PatRecepView
      */
@@ -21,6 +21,15 @@ public class PatientRec_PatRecepView extends javax.swing.JPanel {
         ehis = EHIS.getEhis();
         initComponents();
       
+    }
+
+    public void setPatientID(String patientID) {
+        this.patientID = patientID;
+    }
+    
+    public PatientRec_PatRecepView(String patientID){
+        this();
+        this.patientID = patientID;
     }
 
     public PersonalInfoPanel getPersonalInfoPanel() {
@@ -115,7 +124,7 @@ public class PatientRec_PatRecepView extends javax.swing.JPanel {
 
     private void requestApptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_requestApptButtonActionPerformed
         JDialog dialog = new JDialog(ehis, "Appointment Chooser", true);
-        ApptSelectorPanel panel = new ApptSelectorPanel();
+        ApptSelectorPanel panel = new ApptSelectorPanel(patientID, dialog);
         dialog.setContentPane(panel);
         dialog.pack();
         dialog.setVisible(true);
