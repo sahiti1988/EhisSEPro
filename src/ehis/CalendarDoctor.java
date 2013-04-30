@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDialog;
+import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -25,12 +26,16 @@ import javax.swing.event.ListSelectionListener;
 public class CalendarDoctor extends javax.swing.JPanel {
     
     String docID;
+    //EHIS ehis;
+    //DoctorNursePanel panel;
+    
 
 
     /**
      * Creates new form CalendarDoctor
      */
     public CalendarDoctor(String dID) {
+        //ehis = EHIS.getEhis();
         initComponents();
         docID = dID;
 
@@ -78,6 +83,9 @@ public class CalendarDoctor extends javax.swing.JPanel {
         });
         
     }
+    
+    
+    
 
     public void refresh() {
         
@@ -100,6 +108,7 @@ public class CalendarDoctor extends javax.swing.JPanel {
         lbl_StartTime = new javax.swing.JLabel();
         btn_EndTimeEdit = new javax.swing.JButton();
         lbl_EndTime = new javax.swing.JLabel();
+        backButton = new javax.swing.JButton();
 
         tbl_appointments.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -130,6 +139,13 @@ public class CalendarDoctor extends javax.swing.JPanel {
 
         lbl_EndTime.setText("End:");
 
+        backButton.setText("<-back");
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -155,7 +171,9 @@ public class CalendarDoctor extends javax.swing.JPanel {
                         .addGap(256, 256, 256)
                         .addComponent(lab_Date))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(145, 145, 145)
+                        .addContainerGap()
+                        .addComponent(backButton)
+                        .addGap(62, 62, 62)
                         .addComponent(cal_Chooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -163,7 +181,9 @@ public class CalendarDoctor extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(cal_Chooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cal_Chooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(backButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lab_Date)
                 .addGap(13, 13, 13)
@@ -190,7 +210,17 @@ public class CalendarDoctor extends javax.swing.JPanel {
         refresh();
         
     }//GEN-LAST:event_btn_EndTimeEditActionPerformed
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+         DoctorNursePanel panel = new DoctorNursePanel(docID);
+         EHIS ehis = EHIS.getEhis();
+         ehis.setContentPane(panel);
+         ehis.pack();
+         ehis.validate();
+    }//GEN-LAST:event_backButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backButton;
     private javax.swing.JButton btn_EndTimeEdit;
     private com.toedter.calendar.JCalendar cal_Chooser;
     private javax.swing.JLabel jLabel2;

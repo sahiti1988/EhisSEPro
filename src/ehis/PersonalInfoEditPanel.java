@@ -40,12 +40,12 @@ public class PersonalInfoEditPanel extends javax.swing.JPanel {
     public void setAllFields(String username) {
         try {
 
-            String sql = "SELECT * from Login where userID = '" + username + "';";
+            String sql = "SELECT * from Login JOIN UserType on UserType.TypeID = Login.UserTypeTypeID where userID = '" + username + "';";
 
             pst1 = conn.prepareStatement(sql);
             rs1 = pst1.executeQuery();
 
-            String usertype = rs1.getString("UserTypeTypeID");
+            String usertype = rs1.getString("type");
             lbl_Usertype_Value.setText(usertype);
 
             String firstname = rs1.getString("FName");

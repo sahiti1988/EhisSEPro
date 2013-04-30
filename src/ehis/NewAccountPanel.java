@@ -320,7 +320,7 @@ public class NewAccountPanel extends javax.swing.JPanel {
 
         boolean phoneGood = Pattern.compile("^[0-9]{3}-[0-9]{3}-[0-9]{4}$").matcher(phoneNum).find();
         if (!phoneGood) {
-            JOptionPane.showMessageDialog(null, "Phone number format must be ###-###-####");
+            JOptionPane.showMessageDialog(null, "Phone number format must be xxx-xxx-xxxx");
             return;
         }
 
