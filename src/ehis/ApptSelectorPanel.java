@@ -223,7 +223,6 @@ public class ApptSelectorPanel extends javax.swing.JPanel {
         selectedDoc = docUserIDs.get(doctorCombo.getSelectedIndex());
         String selectedType = typeCombo.getSelectedItem().toString();
 
-        
                     switch(selectedType.charAt(0)){
                         case 'A': selectedAppTypeID = 1;break;
                         case 'F': selectedAppTypeID = 2;break;
@@ -264,9 +263,9 @@ public class ApptSelectorPanel extends javax.swing.JPanel {
                     }
                 //else find latest time available
                 } else {
-                    nextAvailableTime = TimeAndDate.timeStringToDate(rs.getString("AppTime"));
+                    nextAvailableTime = addAppointment(TimeAndDate.timeStringToDate(rs.getString("AppTime")),rs.getInt("AppointmentTypeAppTypeID"));
                     while(rs.next()){
-                        Date thisTime = TimeAndDate.timeStringToDate(rs.getString("AppTime"));
+                        Date thisTime = addAppointment(TimeAndDate.timeStringToDate(rs.getString("AppTime")),rs.getInt("AppointmentTypeAppTypeID"));
                         
                         if(thisTime.after(nextAvailableTime)){
                             nextAvailableTime = thisTime; 
