@@ -60,6 +60,11 @@ public class LoginPanel extends javax.swing.JPanel {
         });
 
         btn_Forgot_Username_Password.setText("Forgot username/password");
+        btn_Forgot_Username_Password.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_Forgot_Username_PasswordActionPerformed(evt);
+            }
+        });
 
         EHISLabel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         EHISLabel.setText("Electronic Health Information System");
@@ -126,6 +131,7 @@ public class LoginPanel extends javax.swing.JPanel {
 
     private void btn_LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_LoginActionPerformed
         String username = txt_username.getText();
+        //System.out.println("username:0" + username);
         String password = String.valueOf(txt_password.getPassword());
         String sql = "SELECT * FROM Login where userID = '"
                 + username + "' AND Password = '" + password + "';";
@@ -166,6 +172,14 @@ public class LoginPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, e);
         }
     }//GEN-LAST:event_btn_LoginActionPerformed
+
+    private void btn_Forgot_Username_PasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Forgot_Username_PasswordActionPerformed
+        ForgotUsernamePassword panel = new ForgotUsernamePassword();
+        ehis.setContentPane(panel);
+        ehis.pack();
+        ehis.validate();
+    }//GEN-LAST:event_btn_Forgot_Username_PasswordActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel EHISLabel;
     private javax.swing.JButton btn_Forgot_Username_Password;

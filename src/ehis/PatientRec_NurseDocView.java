@@ -60,7 +60,7 @@ public class PatientRec_NurseDocView extends javax.swing.JPanel {
         jLabel8 = new javax.swing.JLabel();
 
         medicalHistList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { "no problems" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
@@ -76,7 +76,7 @@ public class PatientRec_NurseDocView extends javax.swing.JPanel {
         });
 
         medicalHistList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { "03-23-2012, 11:30, Abelcet", "03-10-2013, 10:30, Aldoril" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
@@ -87,7 +87,7 @@ public class PatientRec_NurseDocView extends javax.swing.JPanel {
         jLabel3.setText("Diagnosis");
 
         medicalHistList2.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { "BP--126/180", "Height--5'9\"", "Weight--190 lbs" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
@@ -96,7 +96,7 @@ public class PatientRec_NurseDocView extends javax.swing.JPanel {
         jLabel4.setText("Curr Conditions");
 
         medicalHistList3.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { "Heart Murmur" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
@@ -107,23 +107,18 @@ public class PatientRec_NurseDocView extends javax.swing.JPanel {
         jLabel6.setText("Lab Tests");
 
         medicalHistList4.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { "Prescribed Injection" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
         jScrollPane5.setViewportView(medicalHistList4);
 
-        medicalHistList5.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane6.setViewportView(medicalHistList5);
 
         nextAppointmentButton.setText("Patient's Next Appointment");
 
         jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { "Joe Chavez", "Sahiti Koganti", "Ahmed Alzhrani" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
@@ -230,6 +225,7 @@ public class PatientRec_NurseDocView extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
         ehis.setContentPane(panel);
         ehis.pack();

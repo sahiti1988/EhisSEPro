@@ -151,12 +151,8 @@
         <Component class="javax.swing.JList" name="medicalHistList">
           <Properties>
             <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-                <StringItem index="4" value="Item 5"/>
+              <StringArray count="1">
+                <StringItem index="0" value="no problems"/>
               </StringArray>
             </Property>
           </Properties>
@@ -186,12 +182,9 @@
         <Component class="javax.swing.JList" name="medicalHistList1">
           <Properties>
             <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-                <StringItem index="4" value="Item 5"/>
+              <StringArray count="2">
+                <StringItem index="0" value="03-23-2012, 11:30, Abelcet"/>
+                <StringItem index="1" value="03-10-2013, 10:30, Aldoril"/>
               </StringArray>
             </Property>
           </Properties>
@@ -218,12 +211,10 @@
         <Component class="javax.swing.JList" name="medicalHistList2">
           <Properties>
             <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-                <StringItem index="4" value="Item 5"/>
+              <StringArray count="3">
+                <StringItem index="0" value="BP--126/180"/>
+                <StringItem index="1" value="Height--5&apos;9&quot;"/>
+                <StringItem index="2" value="Weight--190 lbs"/>
               </StringArray>
             </Property>
           </Properties>
@@ -245,12 +236,8 @@
         <Component class="javax.swing.JList" name="medicalHistList3">
           <Properties>
             <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-                <StringItem index="4" value="Item 5"/>
+              <StringArray count="1">
+                <StringItem index="0" value="Heart Murmur"/>
               </StringArray>
             </Property>
           </Properties>
@@ -277,12 +264,8 @@
         <Component class="javax.swing.JList" name="medicalHistList4">
           <Properties>
             <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-                <StringItem index="4" value="Item 5"/>
+              <StringArray count="1">
+                <StringItem index="0" value="Prescribed Injection"/>
               </StringArray>
             </Property>
           </Properties>
@@ -299,13 +282,7 @@
         <Component class="javax.swing.JList" name="medicalHistList5">
           <Properties>
             <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-                <StringItem index="4" value="Item 5"/>
-              </StringArray>
+              <StringArray count="0"/>
             </Property>
           </Properties>
         </Component>
@@ -326,12 +303,10 @@
         <Component class="javax.swing.JList" name="jList1">
           <Properties>
             <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-                <StringItem index="4" value="Item 5"/>
+              <StringArray count="3">
+                <StringItem index="0" value="Joe Chavez"/>
+                <StringItem index="1" value="Sahiti Koganti"/>
+                <StringItem index="2" value="Ahmed Alzhrani"/>
               </StringArray>
             </Property>
           </Properties>
